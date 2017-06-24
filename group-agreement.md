@@ -1,9 +1,9 @@
 # Group agreement
 
-- Communication plan: How will your group communicate with each other? What is your strategy for ensuring everyone's voices are heard, and that contributions from both loud and soft voices are listened to?
-- Conflict plan: What will your group do when it encounters conflict? What will your process be to resolve it?
-- Work plan: How you will identify tasks, assign tasks, know when they are complete, and manage work in general? In particular, make sure you know how you'll track whether everyone is contributing equally to the JavaScript, CSS, and HTML portions, and that each person is working on "meaty" problems.
+- Communication plan: A slack group will be created for enhanced communication.  Before any code is worked on remotely, the group  should be consulted via the channel so that no two people working remotely write redundant or conflicting code. NO TEAM MEMBER IS TO MERGE THEIR OWN CODE. 
+- Conflict plan: Any conflicts that arise are to be discussed as calmly as possible by all of the team members since we are all effected either directly or indirectly.  Although we want to do our best, this is not a life and death situation...it's a class project with a specific end goal...to demonstrate we have command over the technologies covered in the last 3 weeks. 
+- Work plan: After our initial wire framing, flow will consist of working in pairs to accomplish specific objectives to achieve MVP. The scope of the pair programming should be as small as possible and should be committed once it is functioning properly and before another task is started. 
 
-- Git process: What is your Git flow? How many people must review a PR? Who merges PRs?
+- Git process: 
 
-- Any thing else you feel is important: expectations around work times, standup times, taking breaks/seeking help when you're stuck, etc.
+- Remember, this is a team effort.  If we cannot collectively agree on a feature or a direction, a group conference should be held for a 15 minute time period after which A time period for implementation will be set or the feature/direction will be dropped. 
