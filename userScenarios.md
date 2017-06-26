@@ -10,5 +10,14 @@
 
 3. Pat casual user, want something to occupy time during a regular commute.
 
-4. Developer scenario
+### Developer scenario
+
+1. As a developer we want to create a well structured/easy to follow game that users will enjoy playing while keeping their minds sharp.
+
+2. Have a way add personalization so that user is engaged.
+
+3. Time limit that decreases with level.
+
+4. Board size scales with level bump.
+
 

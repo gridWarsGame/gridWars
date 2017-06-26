@@ -20,20 +20,12 @@
 
 ## Pat Stories:
 
-1. Wants to be able to pick up the game where he left off.
+1. Wants to be able to pick up the game where he/she left off.
 
-2. 
+2. Personalization
 
-3.
+3.Queues as to where the game left off when last play was paused
 
-4.
+4.Solid mobile interface for good game play while commuting. 
 
-## Developer Stories:
 
-1. Have a way add personalization so that user is engaged.
-
-2. Time limit that decreases with level.
-
-3. Board size scales with level bump.
-
-4.
