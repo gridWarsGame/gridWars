@@ -24,8 +24,8 @@
 
 2. Personalization
 
-3.Queues as to where the game left off when last play was paused
+3. Queues as to where the game left off when last play was paused
 
-4.Solid mobile interface for good game play while commuting. 
+4. Solid mobile interface for good game play while commuting. 
 
 
