@@ -20,9 +20,9 @@
 
 ## Pat Stories:
 
-1.
+1. Wants to be able to pick up the game where he left off.
 
-2.
+2. 
 
 3.
 
@@ -32,8 +32,8 @@
 
 1. Have a way add personalization so that user is engaged.
 
-2.
+2. Time limit that decreases with level.
 
-3.
+3. Board size scales with level bump.
 
 4.
