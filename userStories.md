@@ -10,13 +10,13 @@
 
 ## Jethro Stories:
 
-1.
+1. Clear instructions on how to play the game.
 
-2.
+2. Would like hints on how to play the game.
 
-3.
+3. Doesn't want anything too flashy to be distracting - simple layout.
 
-4.
+4. Some way to track progress as a chart.
 
 ## Pat Stories:
 
