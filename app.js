@@ -1,6 +1,8 @@
 'use strict';
 
-function makeGridTable(size) {
+function makeGridTable(board) {
+
+  var size = board.size;
 
   var domTarget = document.getElementById('grid_table');
   var table = document.createElement('table');
@@ -38,17 +40,18 @@ function Coord () {
   this.sub = false;
 }
 
-function GameBoard() {
+function GameBoard(size) {
+  this.size = size;
   this.grid = [];
-  this.setupBoard();
+  this.setupBoard(size);
 }
 
 GameBoard.prototype.updateBoard = function () {
 
 };
 
-GameBoard.prototype.setupBoard = function () {
-  this.createGrid(4);
+GameBoard.prototype.setupBoard = function (size) {
+  this.createGrid(size);
 };
 
 GameBoard.prototype.addRef = function (i,j,ref) {
@@ -76,5 +79,5 @@ GameBoard.prototype.guessed = function (x,y) {
   return this.grid[x - 1][y - 1].checkSub();
 };
 
-var board = new GameBoard();
-makeGridTable(4);
+var board = new GameBoard(5);
+makeGridTable(board);
