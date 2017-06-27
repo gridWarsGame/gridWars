@@ -79,5 +79,21 @@ GameBoard.prototype.guessed = function (x,y) {
   return this.grid[x - 1][y - 1].checkSub();
 };
 
+function Coord () {
+  //the default is unseen; once coordinate is picked, status ==== hit || miss.
+  this.status = 'unseen';
+  //this tells whether there is a sub at this location.
+  this.sub = false;
+}
+
+Coord.prototype.checkSub = function () {
+  if (this.sub){
+    this.status = 'hit';
+    return true;
+  }
+  this.status = 'miss';
+  return false;
+};
+
 var board = new GameBoard(5);
 makeGridTable(board);
