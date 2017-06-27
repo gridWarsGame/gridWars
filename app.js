@@ -1,7 +1,5 @@
 'use strict';
 
-var board = new GameBoard();
-
 function makeGridTable(size) {
 
   var domTarget = document.getElementById('grid_table');
@@ -23,6 +21,23 @@ function makeGridTable(size) {
   domTarget.appendChild(table);
 }
 
+Coord.prototype.checkSub = function () {
+  if (this.sub){
+    this.status = 'hit';
+    this.squareRef.textContent = 'X';
+    return true;
+  }
+  this.status = 'miss';
+  this.squareRef.textContent = 'O';
+  return false;
+};
+
+function Coord () {
+  //the default is unseen; once coordinate is picked, status ==== hit || miss.
+  this.status = 'unseen';
+  this.sub = false;
+}
+
 function GameBoard() {
   this.grid = [];
   this.setupBoard();
@@ -31,8 +46,9 @@ function GameBoard() {
 GameBoard.prototype.updateBoard = function () {
 
 };
+
 GameBoard.prototype.setupBoard = function () {
-  this.createGrid(5);
+  this.createGrid(4);
 };
 
 GameBoard.prototype.addRef = function (i,j,ref) {
@@ -50,19 +66,15 @@ GameBoard.prototype.createGrid = function (size) {
   }
 };
 
-function Coord () {
-  //the default is unseen; once coordinate is picked, status ==== hit || miss.
-  this.status = 'unseen';
-  this.sub = false;
-}
-
-Coord.prototype.guess = function () {
-  if (this.sub){
-    this.status = 'hit';
-    this.squareRef.textContent = 'X';
-    return true;
-  }
-  this.status = 'miss';
-  this.squareRef.textContent = 'O';
-  return false;
+GameBoard.prototype.addSub = function (x,y) {
+  //subtract one so that grid coordinates start at 1.
+  this.grid[x - 1][y - 1].sub = true;
 };
+
+GameBoard.prototype.guessed = function (x,y) {
+  //subtract one so that grid coordinates start at 1.
+  return this.grid[x - 1][y - 1].checkSub();
+};
+
+var board = new GameBoard();
+makeGridTable(4);
