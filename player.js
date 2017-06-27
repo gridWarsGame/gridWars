@@ -27,6 +27,8 @@ Player.prototype.attack = function(coordinates) {
     turns.push(coordinates);
   } else {
     // Game Over!
+    this.sub.alive = false;
+    alert('You Win!');
   }
 };
 
