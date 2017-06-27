@@ -3,6 +3,7 @@ var score = 0;
 
 function Sub() {
   this.alive = true;
+  this.location = getLocation();
 }
 
 Sub.prototype.addToBoard = function() {
@@ -22,13 +23,14 @@ function Player() {
 }
 
 Player.prototype.attack = function(coordinates) {
-  if(!sub) {
-    alert('Miss!');
-    turns.push(coordinates);
-  } else {
+  var result = Board.grid[coordinates[0]][coordinates[1]].guessed();
+  if(result === true) {
     // Game Over!
     this.sub.alive = false;
     alert('You Win!');
+  } else {
+    turns.push(coordinates);
+    alert('Miss!');
   }
 };
 
