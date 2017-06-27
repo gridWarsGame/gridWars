@@ -3,7 +3,7 @@ var score = 0;
 
 function Sub() {
   this.alive = true;
-  this.location = getLocation();
+  this.location = this.getLocation();
 }
 
 Sub.prototype.addToBoard = function() {
@@ -13,7 +13,7 @@ Sub.prototype.addToBoard = function() {
 Sub.prototype.getLocation = function() {
   var x = Math.floor(Math.random() * 3);
   var y = Math.floor(Math.random() * 3);
-  return x, y;
+  return [x, y];
 };
 
 function Player() {
@@ -23,7 +23,7 @@ function Player() {
 }
 
 Player.prototype.attack = function(coordinates) {
-  var result = Board.grid[coordinates[0]][coordinates[1]].guessed();
+  var result = gameBoard.grid[coordinates[0]][coordinates[1]].guessed();
   if(result === true) {
     // Game Over!
     this.sub.alive = false;
@@ -45,4 +45,8 @@ fire.addEventListener('submit', function(event) {
   var coordinates = parseInt(event.target.name.value);
   Player.attack(coordinates);
 });
+
+let tree = new Sub();
+console.log(tree);
+
 
