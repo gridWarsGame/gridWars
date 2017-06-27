@@ -134,10 +134,8 @@ var player = new Player();
 var fire = document.getElementById('fire');
 fire.addEventListener('submit', function(event) {
   event.preventDefault();
-  // event.stopPropagation();
-  console.log(event);
+  event.stopPropagation();
   var x = parseInt(event.target.x.value);
   var y = parseInt(event.target.y.value);
-  console.log(x, y);
   player.attack(x, y);
 });
