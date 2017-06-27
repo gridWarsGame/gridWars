@@ -54,13 +54,11 @@ function Coord () {
   this.sub = false;
 }
 
-// Coord.prototype.guessed = function () {
-//   if (this.sub){
-//     this.status = 'hit';
-//   }
-//   else{
-//     this.status = 'miss';
-//   }
-// };
-
-//make table
+Coord.prototype.guess = function () {
+  if (this.sub){
+    this.status = 'hit';
+    return true;
+  }
+  this.status = 'miss';
+  return false;
+};
