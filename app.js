@@ -1,40 +1,61 @@
 'use strict';
 
-function makeGridTable(size) {
-  var refSquares = [];
+function makeGridTable(board) {
+
+  var size = board.size;
 
   var domTarget = document.getElementById('grid_table');
   var table = document.createElement('table');
 
   for (var i = 0; i < size; i++) {
     var row = document.createElement('tr');
-    var refRow = [];
 
     for (var j = 0; j < size; j++) {
       var square = document.createElement('td');
       square.textContent = '—';
-      refRow.push(square);
-      row.appendChild(square);
-    }
 
-    refSquares.push(refRow);
+      row.appendChild(square);
+      board.addRef(i,j,square);
+
+    }
     table.appendChild(row);
   }
-
   domTarget.appendChild(table);
-
-  return refSquares;
 }
 
-function GameBoard() {
+Coord.prototype.checkSub = function () {
+  if (this.sub){
+    this.status = 'hit';
+    this.squareRef.textContent = 'X';
+    return true;
+  }
+  this.status = 'miss';
+  this.squareRef.textContent = 'O';
+  return false;
+};
+
+function Coord () {
+  //the default is unseen; once coordinate is picked, status ==== hit || miss.
+  this.status = 'unseen';
+  this.sub = false;
+}
+
+function GameBoard(size) {
+  this.size = size;
   this.grid = [];
+  this.setupBoard(size);
 }
 
 GameBoard.prototype.updateBoard = function () {
 
 };
-GameBoard.prototype.setupBoard = function () {
-  this.createGrid(5);
+
+GameBoard.prototype.setupBoard = function (size) {
+  this.createGrid(size);
+};
+
+GameBoard.prototype.addRef = function (i,j,ref) {
+  this.grid[i][j].squareRef = ref;
 };
 
 //make table
@@ -73,3 +94,6 @@ Coord.prototype.checkSub = function () {
   this.status = 'miss';
   return false;
 };
+
+var board = new GameBoard(5);
+makeGridTable(board);
