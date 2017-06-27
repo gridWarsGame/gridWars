@@ -1,4 +1,5 @@
 'use strict';
+
 function makeGridTable(size) {
   var refSquares = [];
 
@@ -11,7 +12,7 @@ function makeGridTable(size) {
 
     for (var j = 0; j < size; j++) {
       var square = document.createElement('td');
-      square.textContent = '-';
+      square.textContent = '—';
       refRow.push(square);
       row.appendChild(square);
     }
