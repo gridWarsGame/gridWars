@@ -8,7 +8,7 @@ GameBoard.prototype.updateBoard = function () {
 
 };
 GameBoard.prototype.setupBoard = function () {
-
+  this.createGrid(5);
 };
 
 //make table
@@ -27,6 +27,11 @@ GameBoard.prototype.addSub = function (x,y) {
   this.grid[x - 1][y - 1].sub = true;
 };
 
+GameBoard.prototype.guessed = function (x,y) {
+  //subtract one so that grid coordinates start at 1.
+  return this.grid[x - 1][y - 1].checkSub();
+};
+
 function Coord () {
   //the default is unseen; once coordinate is picked, status ==== hit || miss.
   this.status = 'unseen';
@@ -34,7 +39,7 @@ function Coord () {
   this.sub = false;
 }
 
-Coord.prototype.guessed = function () {
+Coord.prototype.checkSub = function () {
   if (this.sub){
     this.status = 'hit';
     return true;
