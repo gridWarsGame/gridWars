@@ -34,12 +34,6 @@ Coord.prototype.checkSub = function () {
   return false;
 };
 
-function Coord () {
-  //the default is unseen; once coordinate is picked, status ==== hit || miss.
-  this.status = 'unseen';
-  this.sub = false;
-}
-
 function GameBoard(size) {
   this.size = size;
   this.grid = [];
@@ -71,7 +65,7 @@ GameBoard.prototype.createGrid = function (size) {
 
 GameBoard.prototype.addSub = function (x,y) {
   //subtract one so that grid coordinates start at 1.
-  this.grid[x - 1][y - 1].sub = true;
+  this.grid[x][y].sub = true;
 };
 
 GameBoard.prototype.guessed = function (x,y) {
@@ -86,14 +80,62 @@ function Coord () {
   this.sub = false;
 }
 
-Coord.prototype.checkSub = function () {
-  if (this.sub){
-    this.status = 'hit';
-    return true;
-  }
-  this.status = 'miss';
-  return false;
-};
-
 var board = new GameBoard(5);
 makeGridTable(board);
+
+// paste from player.js
+var score = 0;
+
+function Sub() {
+  this.alive = true;
+  this.location = this.getLocation();
+  this.addToBoard();
+}
+
+Sub.prototype.addToBoard = function() {
+  // setting physical location of sub on board.
+  var x = this.location[0];
+  var y = this.location[1];
+  board.addSub(x, y);
+};
+
+Sub.prototype.getLocation = function() {
+  var x = Math.floor(Math.random() * board.size);
+  var y = Math.floor(Math.random() * board.size);
+  return [x, y];
+};
+
+var sub = new Sub();
+
+function Player() {
+  this.name = name;
+  this.score = score;
+  this.turns = [];
+}
+
+Player.prototype.attack = function(x, y) {
+  var result = board.guessed(x, y);
+  if(result === true) {
+    // Game Over!
+    sub.alive = false;
+    alert('You Win!');
+  } else {
+    this.turns.push([x, y]);
+    alert('Miss!');
+  }
+};
+
+Player.prototype.updateScore = function() {
+
+};
+
+var player = new Player();
+
+var fire = document.getElementById('fire');
+fire.addEventListener('submit', function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  var x = parseInt(event.target.x.value);
+  var y = parseInt(event.target.y.value);
+  player.attack(x, y);
+});
