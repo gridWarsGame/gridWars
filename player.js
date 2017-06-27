@@ -37,3 +37,12 @@ Player.prototype.attack = function(coordinates) {
 Player.prototype.updateScore = function() {
 
 };
+
+var fire = document.getElementById('fire');
+fire.addEventListener('submit', function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  var coordinates = parseInt(event.target.name.value);
+  Player.attack(coordinates);
+});
+
