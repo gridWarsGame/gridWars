@@ -63,9 +63,10 @@ GameBoard.prototype.createGrid = function (size) {
   }
 };
 
-GameBoard.prototype.addSub = function (x,y) {
+GameBoard.prototype.addSub = function (x, y, subObj) {
   //subtract one so that grid coordinates start at 1.
   this.grid[x][y].sub = true;
+  this.grid[x][y].subRef = subObj;
 };
 
 GameBoard.prototype.guessed = function (x,y) {
@@ -86,11 +87,23 @@ makeGridTable(board);
 // paste from player.js
 var score = 0;
 
-function Sub() {
+function Sub(length) {
   this.alive = true;
+  this.length = length;
+  this.lifePoints = this.length;
+  this.orientation = this.getOriention();
   this.location = this.getLocation();
   this.addToBoard();
 }
+
+Sub.prototype.getOriention = function() {
+  var coin = Math.round(Math.random());
+  if (coin) {
+    return 'north-south';
+  } else {
+    return 'east-west';
+  }
+};
 
 Sub.prototype.addToBoard = function() {
   // setting physical location of sub on board.
@@ -100,8 +113,15 @@ Sub.prototype.addToBoard = function() {
 };
 
 Sub.prototype.getLocation = function() {
-  var x = Math.floor(Math.random() * board.size);
-  var y = Math.floor(Math.random() * board.size);
+  var offsetX = 0;
+  var offsetY = 0;
+  if (this.orientation === 'north-south') {
+    offsetY = this.length - 1;
+  } else {
+    offsetX = this.length - 1;
+  }
+  var x = Math.floor(Math.random() * (board.size - offsetX));
+  var y = Math.floor(Math.random() * (board.size - offsetY));
   return [x, y];
 };
 
