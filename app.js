@@ -64,12 +64,13 @@ GameBoard.prototype.restore = function(){
 GameBoard.prototype.updateBoard = function () {
   for (var i = 0; i < this.size; i++) {
     for (var j = 0; j < this.size; j++) {
-      // var status = this.grid[i][j].status ;
-      // var squareRef = this.grid[i][j].squareRef;
-      if(this.grid[i][j].status === 'miss'){
-        this.grid[i][j].squareRef.textContent = 'O';
-      }else if(this.grid[i][j].status === 'hit'){
-        this.grid[i][j].squareRef.textContent = 'X';
+      var status = this.grid[i][j].status ;
+      var squareRef = this.grid[i][j].squareRef;
+      
+      if(status === 'miss'){
+        squareRef.textContent = 'O';
+      }else if(status === 'hit'){
+        squareRef.textContent = 'X';
       }
     }
   }
