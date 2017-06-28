@@ -12,7 +12,7 @@ function makeGridTable(board) {
 
     for (var j = 0; j < size; j++) {
       var square = document.createElement('td');
-      square.textContent = '—';
+      square.textContent = ' ';
 
       row.appendChild(square);
       board.addRef(i,j,square);
@@ -80,7 +80,7 @@ function Coord () {
   this.sub = false;
 }
 
-var board = new GameBoard(5);
+var board = new GameBoard(10);
 makeGridTable(board);
 
 // paste from player.js
