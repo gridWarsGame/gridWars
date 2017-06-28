@@ -159,25 +159,22 @@ Player.prototype.attack = function(x, y) {
     if(sub.alive === false) {
       alert('You destroyed the sub!');
       player.updateScore();
+      fire.removeEventListener('submit', fireMissles);
     }
   } else {
     alert('Miss!');
-    player.updateScore();
   }
   this.turns.push([x, y]);
 };
-
+var total = 0;
 Player.prototype.updateScore = function() {
   score = count;
-  score += count;
+  total += score;
   var scoreboard = document.getElementById('scoreboard');
-  scoreboard.textContent = score;
+  scoreboard.textContent = total;
 };
 
-
-
 var player = new Player();
-
 
 var fire = document.getElementById('fire');
 fire.addEventListener('submit', fireMissles);
