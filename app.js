@@ -250,13 +250,14 @@ Player.prototype.attack = function(x, y) {
     sub.hit();
     alert('Hit!');
     player.updateScore();
-    if(sub.alive === false) {
-      alert('You destroyed the sub!');
-      player.updateScore();
-      fire.removeEventListener('submit', fireMissles);
-    }
   } else {
     alert('Miss!');
+  }
+  if(sub.alive === false) {
+    alert('You destroyed the sub!');
+    player.updateScore();
+    fire.removeEventListener('submit', fireMissles);
+    result = false;
   }
   this.turns.push([x, y]);
   this.save();
@@ -275,12 +276,13 @@ var fire = document.getElementById('fire');
 fire.addEventListener('submit', fireMissles);
 
 function fireMissles (event) {
+  event.preventDefault();
+  event.stopPropagation();
   if (count === 0) {
     alert('You Lose!');
     fire.removeEventListener('submit', fireMissles);
+    return;
   }
-  event.preventDefault();
-  event.stopPropagation();
   var x = parseInt(event.target.x.value);
   var y = parseInt(event.target.y.value);
   player.attack(x, y);
