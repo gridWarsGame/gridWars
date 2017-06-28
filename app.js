@@ -40,8 +40,12 @@ function GameBoard(size) {
     this.grid = [];
     this.setupBoard(size);
     this.save();
+    console.log('being created');       
   }else {
+    console.log('being restored');   
     this.restore();
+    this.setupBoard(size);
+    this.updateBoard();
   }
 }
 
@@ -59,7 +63,17 @@ GameBoard.prototype.restore = function(){
 };
 
 GameBoard.prototype.updateBoard = function () {
-
+  for (var i = 0; i < this.size; i++) {
+    for (var j = 0; j < this.size; j++) {
+      // var status = this.grid[i][j].status ;
+      // var squareRef = this.grid[i][j].squareRef;
+      if(this.grid[i][j].status === 'miss'){
+        this.grid[i][j].squareRef.textContent = 'O';
+      }else if(this.grid[i][j].status === 'hit'){
+        this.grid[i][j].squareRef.textContent = 'X';
+      }
+    }
+  }
 };
 
 GameBoard.prototype.setupBoard = function (size) {
@@ -72,12 +86,20 @@ GameBoard.prototype.addRef = function (i,j,ref) {
 
 //make table
 GameBoard.prototype.createGrid = function (size) {
-  for (var i = 0; i < size; i++) {
-    var row = [];
-    for (var j = 0; j < size; j++) {
-      row.push(new Coord());
+  if(this.grid.length === 0) {    
+    for (var i = 0; i < size; i++) {
+      var row = [];
+      for (var j = 0; j < size; j++) {
+        row.push(new Coord());
+      }
+      this.grid.push(row);
     }
-    this.grid.push(row);
+  }else {
+    for (i = 0; i < size; i++) {
+      for (j = 0; j < size; j++) {
+        this.grid[i][j] = new Coord(this.grid[i][j]);
+      }
+    }
   }
 };
 
@@ -91,11 +113,19 @@ GameBoard.prototype.guessed = function (x,y) {
   return this.grid[x - 1][y - 1].checkSub();
 };
 
-function Coord () {
-  //the default is unseen; once coordinate is picked, status ==== hit || miss.
-  this.status = 'unseen';
-  //this tells whether there is a sub at this location.
-  this.sub = false;
+function Coord (object) {
+  if(object) {
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        this[key] = object[key];       
+      }
+    }
+  }else {
+    //the default is unseen; once coordinate is picked, status ==== hit || miss.
+    this.status = 'unseen';
+    //this tells whether there is a sub at this location.
+    this.sub = false;
+  }
 }
 
 var board = new GameBoard(5);
