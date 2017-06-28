@@ -35,13 +35,44 @@ Coord.prototype.checkSub = function () {
 };
 
 function GameBoard(size) {
-  this.size = size;
-  this.grid = [];
-  this.setupBoard(size);
+  if (localStorage.getItem('board') === null){
+    this.size = size;
+    this.grid = [];
+    this.setupBoard(size);
+    this.save();
+    console.log('being created');       
+  }else {
+    console.log('being restored');   
+    this.restore();
+    this.setupBoard(size);
+  }
 }
 
-GameBoard.prototype.updateBoard = function () {
+GameBoard.prototype.save = function() {
+  localStorage.setItem('board', JSON.stringify(this));
+};
 
+GameBoard.prototype.restore = function(){
+  var boardProps = JSON.parse(localStorage.getItem('board'));
+  for (var key in boardProps) {
+    if (boardProps.hasOwnProperty(key)) {
+      this[key] = boardProps[key];     
+    }
+  }
+};
+
+GameBoard.prototype.updateBoard = function () {
+  for (var i = 0; i < this.size; i++) {
+    for (var j = 0; j < this.size; j++) {
+      // var status = this.grid[i][j].status ;
+      // var squareRef = this.grid[i][j].squareRef;
+      if(this.grid[i][j].status === 'miss'){
+        this.grid[i][j].squareRef.textContent = 'O';
+      }else if(this.grid[i][j].status === 'hit'){
+        this.grid[i][j].squareRef.textContent = 'X';
+      }
+    }
+  }
 };
 
 GameBoard.prototype.setupBoard = function (size) {
@@ -54,12 +85,20 @@ GameBoard.prototype.addRef = function (i,j,ref) {
 
 //make table
 GameBoard.prototype.createGrid = function (size) {
-  for (var i = 0; i < size; i++) {
-    var row = [];
-    for (var j = 0; j < size; j++) {
-      row.push(new Coord());
+  if(this.grid.length === 0) {    
+    for (var i = 0; i < size; i++) {
+      var row = [];
+      for (var j = 0; j < size; j++) {
+        row.push(new Coord());
+      }
+      this.grid.push(row);
     }
-    this.grid.push(row);
+  }else {
+    for (i = 0; i < size; i++) {
+      for (j = 0; j < size; j++) {
+        this.grid[i][j] = new Coord(this.grid[i][j]);
+      }
+    }
   }
 };
 
@@ -73,27 +112,54 @@ GameBoard.prototype.guessed = function (x,y) {
   return this.grid[x - 1][y - 1].checkSub();
 };
 
-function Coord () {
-  //the default is unseen; once coordinate is picked, status ==== hit || miss.
-  this.status = 'unseen';
-  //this tells whether there is a sub at this location.
-  this.sub = false;
+function Coord (object) {
+  if(object) {
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        this[key] = object[key];       
+      }
+    }
+  }else {
+    //the default is unseen; once coordinate is picked, status ==== hit || miss.
+    this.status = 'unseen';
+    //this tells whether there is a sub at this location.
+    this.sub = false;
+  }
 }
 
 var board = new GameBoard(5);
 makeGridTable(board);
+board.updateBoard();
 
 // paste from player.js
 var score = 0;
 
 function Sub(length) {
-  this.alive = true;
-  this.length = length;
-  this.lifePoints = this.length;
-  this.orientation = this.getOriention();
-  this.location = this.getLocation();
+  if (localStorage.getItem('sub') === null) {
+    this.alive = true;
+    this.length = length;
+    this.lifePoints = this.length;
+    this.orientation = this.getOriention();
+    this.location = this.getLocation(); 
+    this.save(); 
+  } else {
+    this.restore();
+  }
   this.addToBoard();
 }
+
+Sub.prototype.save = function() {
+  localStorage.setItem('sub', JSON.stringify(this));
+};
+
+Sub.prototype.restore = function(){
+  var subProps = JSON.parse(localStorage.getItem('sub'));
+  for (var key in subProps) {
+    if (subProps.hasOwnProperty(key)) {
+      this[key] = subProps[key];     
+    }
+  }
+};
 
 Sub.prototype.getOriention = function() {
   var coin = Math.round(Math.random());
@@ -109,6 +175,7 @@ Sub.prototype.hit = function() {
   if (this.lifePoints === 0) {
     this.alive = false;
   }
+  this.save();
 };
 
 Sub.prototype.addToBoard = function() {
@@ -124,6 +191,7 @@ Sub.prototype.addToBoard = function() {
       x++;
     }
   }
+  board.save();
 };
 
 Sub.prototype.getLocation = function() {
@@ -142,13 +210,32 @@ Sub.prototype.getLocation = function() {
 var sub = new Sub(3);
 
 function Player() {
-  this.name = name;
-  this.score = score;
-  this.turns = [];
+  if (localStorage.getItem('player') === null) {
+    this.name = name;
+    this.score = score;
+    this.turns = [];
+    this.save();
+  }else {
+    this.restore();
+  }
 }
+
+Player.prototype.save = function() {
+  localStorage.setItem('player', JSON.stringify(this));
+};
+
+Player.prototype.restore = function(){
+  var playerProps = JSON.parse(localStorage.getItem('player'));
+  for (var key in playerProps) {
+    if (playerProps.hasOwnProperty(key)) {
+      this[key] = playerProps[key];     
+    }
+  }
+};
 
 Player.prototype.attack = function(x, y) {
   var result = board.guessed(x, y);
+  board.save();
   if(result === true) {
     // Game Over!
     sub.hit();
@@ -160,6 +247,7 @@ Player.prototype.attack = function(x, y) {
     alert('Miss!');
   }
   this.turns.push([x, y]);
+  this.save();
 };
 
 Player.prototype.updateScore = function() {
