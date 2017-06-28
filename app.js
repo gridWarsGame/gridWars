@@ -63,10 +63,9 @@ GameBoard.prototype.createGrid = function (size) {
   }
 };
 
-GameBoard.prototype.addSub = function (x, y, subObj) {
+GameBoard.prototype.addSub = function (x, y) {
   //subtract one so that grid coordinates start at 1.
   this.grid[x][y].sub = true;
-  this.grid[x][y].subRef = subObj;
 };
 
 GameBoard.prototype.guessed = function (x,y) {
@@ -105,11 +104,26 @@ Sub.prototype.getOriention = function() {
   }
 };
 
+Sub.prototype.hit = function() {
+  this.lifePoints--;
+  if (this.lifePoints === 0) {
+    this.alive = false;
+  }
+};
+
 Sub.prototype.addToBoard = function() {
   // setting physical location of sub on board.
   var x = this.location[0];
   var y = this.location[1];
-  board.addSub(x, y);
+  for (var i = 0; i < this.length; i++) {
+    if (this.orientation === 'north-south') {
+      y++;
+    } else {
+      x++;
+    }
+    console.log(x,y);
+    board.addSub(x, y);
+  }
 };
 
 Sub.prototype.getLocation = function() {
@@ -125,7 +139,7 @@ Sub.prototype.getLocation = function() {
   return [x, y];
 };
 
-var sub = new Sub();
+var sub = new Sub(3);
 
 function Player() {
   this.name = name;
@@ -137,8 +151,11 @@ Player.prototype.attack = function(x, y) {
   var result = board.guessed(x, y);
   if(result === true) {
     // Game Over!
-    sub.alive = false;
-    alert('You Win!');
+    sub.hit();
+    alert('Hit!');
+    if(sub.alive === false) {
+      alert('You destroyed the sub!');
+    }
   } else {
     this.turns.push([x, y]);
     alert('Miss!');
