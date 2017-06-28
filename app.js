@@ -35,10 +35,28 @@ Coord.prototype.checkSub = function () {
 };
 
 function GameBoard(size) {
-  this.size = size;
-  this.grid = [];
-  this.setupBoard(size);
+  if (localStorage.getItem('board') === null){
+    this.size = size;
+    this.grid = [];
+    this.setupBoard(size);
+    this.save();
+  }else {
+    this.restore();
+  }
 }
+
+GameBoard.prototype.save = function() {
+  localStorage.setItem('board', JSON.stringify(this));
+};
+
+GameBoard.prototype.restore = function(){
+  var boardProps = JSON.parse(localStorage.getItem('board'));
+  for (var key in boardProps) {
+    if (boardProps.hasOwnProperty(key)) {
+      this[key] = boardProps[key];     
+    }
+  }
+};
 
 GameBoard.prototype.updateBoard = function () {
 
@@ -143,6 +161,7 @@ Sub.prototype.addToBoard = function() {
       x++;
     }
   }
+  board.save();
 };
 
 Sub.prototype.getLocation = function() {
@@ -161,13 +180,32 @@ Sub.prototype.getLocation = function() {
 var sub = new Sub(3);
 
 function Player() {
-  this.name = name;
-  this.score = score;
-  this.turns = [];
+  if (localStorage.getItem('player') === null) {
+    this.name = name;
+    this.score = score;
+    this.turns = [];
+    this.save();
+  }else {
+    this.restore();
+  }
 }
+
+Player.prototype.save = function() {
+  localStorage.setItem('player', JSON.stringify(this));
+};
+
+Player.prototype.restore = function(){
+  var playerProps = JSON.parse(localStorage.getItem('player'));
+  for (var key in playerProps) {
+    if (playerProps.hasOwnProperty(key)) {
+      this[key] = playerProps[key];     
+    }
+  }
+};
 
 Player.prototype.attack = function(x, y) {
   var result = board.guessed(x, y);
+  board.save();
   if(result === true) {
     // Game Over!
     sub.hit();
@@ -179,6 +217,7 @@ Player.prototype.attack = function(x, y) {
     alert('Miss!');
   }
   this.turns.push([x, y]);
+  this.save();
 };
 
 Player.prototype.updateScore = function() {
