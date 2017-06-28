@@ -209,6 +209,8 @@ Sub.prototype.getLocation = function() {
 
 var sub = new Sub(3);
 
+var count = 10;
+
 function Player() {
   if (localStorage.getItem('player') === null) {
     this.name = name;
@@ -240,8 +242,11 @@ Player.prototype.attack = function(x, y) {
     // Game Over!
     sub.hit();
     alert('Hit!');
+    player.updateScore();
     if(sub.alive === false) {
       alert('You destroyed the sub!');
+      player.updateScore();
+      fire.removeEventListener('submit', fireMissles);
     }
   } else {
     alert('Miss!');
@@ -249,18 +254,29 @@ Player.prototype.attack = function(x, y) {
   this.turns.push([x, y]);
   this.save();
 };
-
+var total = 0;
 Player.prototype.updateScore = function() {
-
+  score = count;
+  total += score;
+  var scoreboard = document.getElementById('scoreboard');
+  scoreboard.textContent = total;
 };
 
 var player = new Player();
 
 var fire = document.getElementById('fire');
-fire.addEventListener('submit', function(event) {
+fire.addEventListener('submit', fireMissles);
+
+function fireMissles (event) {
+  if (count === 0) {
+    alert('You Lose!');
+    fire.removeEventListener('submit', fireMissles);
+  }
   event.preventDefault();
   event.stopPropagation();
   var x = parseInt(event.target.x.value);
   var y = parseInt(event.target.y.value);
   player.attack(x, y);
-});
+  count--;
+  console.log(count);
+}
