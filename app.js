@@ -141,6 +141,8 @@ Sub.prototype.getLocation = function() {
 
 var sub = new Sub(3);
 
+var count = 10;
+
 function Player() {
   this.name = name;
   this.score = score;
@@ -160,18 +162,19 @@ Player.prototype.attack = function(x, y) {
     }
   } else {
     alert('Miss!');
+    player.updateScore();
   }
   this.turns.push([x, y]);
 };
 
 Player.prototype.updateScore = function() {
-  score += points;
+  score = count;
+  score += count;
   var scoreboard = document.getElementById('scoreboard');
   scoreboard.textContent = score;
 };
 
-var count = 10;
-var points = count;
+
 
 var player = new Player();
 
