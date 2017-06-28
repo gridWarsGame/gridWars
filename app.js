@@ -289,3 +289,9 @@ function fireMissles (event) {
   count--;
   console.log(count);
 }
+
+var resetButton = document.getElementById('resetButton');
+resetButton.addEventListener('click', function() {
+  location.reload();
+  localStorage.clear();
+});
