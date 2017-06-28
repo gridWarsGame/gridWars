@@ -45,7 +45,6 @@ function GameBoard(size) {
     console.log('being restored');   
     this.restore();
     this.setupBoard(size);
-    this.updateBoard();
   }
 }
 
@@ -130,6 +129,7 @@ function Coord (object) {
 
 var board = new GameBoard(5);
 makeGridTable(board);
+board.updateBoard();
 
 // paste from player.js
 var score = 0;
