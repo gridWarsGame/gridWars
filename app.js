@@ -127,6 +127,7 @@ Sub.prototype.hit = function() {
   if (this.lifePoints === 0) {
     this.alive = false;
   }
+  this.save();
 };
 
 Sub.prototype.addToBoard = function() {
