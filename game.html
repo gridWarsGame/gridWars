@@ -3,16 +3,25 @@
   <head>
     <meta charset="utf-8">
     <title>*Grid Wars*</title>
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <section id="grid_table">
 
     </section>
     <form id="fire">
-      <input type="number" name="x">
-      <input type="number" name="y">
+      <input placeholder="enter longitude"type="number" name="x">
+      <input placeholder="enter latitude"type="number" name="y">
       <button type="submit">Fire!</button>
     </form>
+
+    <a id="home" accesskey=""href="index.html">Home</a>
+
+    <h2>Score</h2>
+    <ul>
+      <li id="scoreboard"></li>
+    </ul>
+
     <script src="app.js" charset="utf-8"></script>
   </body>
 </html>
