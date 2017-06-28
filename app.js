@@ -157,9 +157,9 @@ Player.prototype.attack = function(x, y) {
       alert('You destroyed the sub!');
     }
   } else {
-    this.turns.push([x, y]);
     alert('Miss!');
   }
+  this.turns.push([x, y]);
 };
 
 Player.prototype.updateScore = function() {
