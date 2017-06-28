@@ -147,6 +147,7 @@ function Player() {
   this.turns = [];
 }
 
+
 Player.prototype.attack = function(x, y) {
   var result = board.guessed(x, y);
   if(result === true) {
@@ -155,24 +156,47 @@ Player.prototype.attack = function(x, y) {
     alert('Hit!');
     if(sub.alive === false) {
       alert('You destroyed the sub!');
+    } else if (count >= 1) {
+      alert('Miss!');
+    } else {
+      alert('You Lose!');
     }
-  } else {
-    alert('Miss!');
+    this.turns.push([x, y]);
   }
-  this.turns.push([x, y]);
 };
-
 Player.prototype.updateScore = function() {
 
 };
 
-var player = new Player();
 
+// var fire = document.getElementById('fire');
+// fire.addEventListener('submit', function(event) {
+//   event.preventDefault();
+//   event.stopPropagation();
+//   var x = parseInt(event.target.x.value);
+//   var y = parseInt(event.target.y.value);
+//   player.attack(x, y);
+//   count--;
+//   console.log(count);
+// });
+var player = new Player();
+var count = 9;
 var fire = document.getElementById('fire');
-fire.addEventListener('submit', function(event) {
+fire.addEventListener('submit', fireMissles);
+
+function fireMissles (event) {
+  if (count === 0) {
+    fire.removeEventListener('submit', fireMissles);
+    alert('You lose!');
+    // event.preventDefault();
+    // event.stopPropagation();
+  }
+
   event.preventDefault();
   event.stopPropagation();
   var x = parseInt(event.target.x.value);
   var y = parseInt(event.target.y.value);
   player.attack(x, y);
-});
+  count--;
+  console.log(count);
+}
