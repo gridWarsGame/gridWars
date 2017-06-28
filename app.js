@@ -87,13 +87,31 @@ makeGridTable(board);
 var score = 0;
 
 function Sub(length) {
-  this.alive = true;
-  this.length = length;
-  this.lifePoints = this.length;
-  this.orientation = this.getOriention();
-  this.location = this.getLocation();
+  if (localStorage.getItem('sub') === null) {
+    this.alive = true;
+    this.length = length;
+    this.lifePoints = this.length;
+    this.orientation = this.getOriention();
+    this.location = this.getLocation(); 
+    this.save(); 
+  } else {
+    this.restore();
+  }
   this.addToBoard();
 }
+
+Sub.prototype.save = function() {
+  localStorage.setItem('sub', JSON.stringify(this));
+};
+
+Sub.prototype.restore = function(){
+  var subProps = JSON.parse(localStorage.getItem('sub'));
+  for (var key in subProps) {
+    if (subProps.hasOwnProperty(key)) {
+      this[key] = subProps[key];     
+    }
+  }
+};
 
 Sub.prototype.getOriention = function() {
   var coin = Math.round(Math.random());
