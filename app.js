@@ -116,13 +116,13 @@ Sub.prototype.addToBoard = function() {
   var x = this.location[0];
   var y = this.location[1];
   for (var i = 0; i < this.length; i++) {
+    console.log(x,y);
+    board.addSub(x, y);
     if (this.orientation === 'north-south') {
       y++;
     } else {
       x++;
     }
-    console.log(x,y);
-    board.addSub(x, y);
   }
 };
 
