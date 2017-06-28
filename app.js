@@ -153,8 +153,10 @@ Player.prototype.attack = function(x, y) {
     // Game Over!
     sub.hit();
     alert('Hit!');
+    player.updateScore();
     if(sub.alive === false) {
       alert('You destroyed the sub!');
+      player.updateScore();
     }
   } else {
     alert('Miss!');
@@ -163,16 +165,30 @@ Player.prototype.attack = function(x, y) {
 };
 
 Player.prototype.updateScore = function() {
-
+  score += points;
+  var scoreboard = document.getElementById('scoreboard');
+  scoreboard.textContent = score;
 };
+
+var count = 10;
+var points = count;
 
 var player = new Player();
 
+
 var fire = document.getElementById('fire');
-fire.addEventListener('submit', function(event) {
+fire.addEventListener('submit', fireMissles);
+
+function fireMissles (event) {
+  if (count === 0) {
+    alert('You Lose!');
+    fire.removeEventListener('submit', fireMissles);
+  }
   event.preventDefault();
   event.stopPropagation();
   var x = parseInt(event.target.x.value);
   var y = parseInt(event.target.y.value);
   player.attack(x, y);
-});
+  count--;
+  console.log(count);
+}
