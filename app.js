@@ -24,14 +24,20 @@ function makeGridTable(board) {
 }
 
 Coord.prototype.checkSub = function () {
-  if (this.sub){
-    this.status = 'hit';
-    this.squareRef.textContent = 'X';
-    return true;
+  if (this.status == 'unseen') {
+    if (this.sub){
+      this.status = 'hit';
+      this.squareRef.textContent = 'X';
+      return true;
+    }
+    this.status = 'miss';
+    this.squareRef.textContent = 'O';
+    return false;
   }
-  this.status = 'miss';
-  this.squareRef.textContent = 'O';
-  return false;
+  else {
+    alert('You need to pick a different square!');
+    return false;
+  }
 };
 
 function GameBoard(size) {
@@ -66,7 +72,7 @@ GameBoard.prototype.updateBoard = function () {
     for (var j = 0; j < this.size; j++) {
       var status = this.grid[i][j].status ;
       var squareRef = this.grid[i][j].squareRef;
-      
+
       if(status === 'miss'){
         squareRef.textContent = 'O';
       }else if(status === 'hit'){
