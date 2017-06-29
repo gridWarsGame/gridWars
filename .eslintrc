@@ -17,7 +17,11 @@
         "no-console": 0,
         "indent": [ 2, 2 ],
         "quotes": [ 2, "single"],
+<<<<<<< HEAD
         "linebreak-style": [ 2, "unix" ],
+=======
+        "linebreak-style": [ 0 ],
+>>>>>>> 01c7fade551ab2fc39bb4986951cd8f4b49194b3
         "semi": [ 2, "always" ]
     },
     "env": {
