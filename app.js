@@ -298,6 +298,7 @@ function fireMissles (event) {
   player.attack(x, y);
   count--;
   console.log(count);
+
 }
 
 var resetButton = document.getElementById('resetButton');
@@ -307,3 +308,4 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
 });
+
