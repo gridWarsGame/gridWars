@@ -293,5 +293,7 @@ function fireMissles (event) {
 var resetButton = document.getElementById('resetButton');
 resetButton.addEventListener('click', function() {
   location.reload();
-  localStorage.clear();
+  localStorage.removeItem('board');
+  localStorage.removeItem('sub');
+  localStorage.removeItem('player');
 });
