@@ -270,6 +270,10 @@ Player.prototype.updateScore = function() {
   scoreboard.textContent = total;
 };
 
+Player.prototype.getName = function () {
+  this.name = prompt('Let\'s get started! What is your name?');
+  return;
+};
 var player = new Player();
 player.getName();
 
@@ -298,8 +302,3 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
 });
-
-Player.prototype.getName = function () {
-  this.name = prompt('Let\'s get started! What is your name?');
-  return;
-};
