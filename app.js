@@ -311,12 +311,13 @@ Player.prototype.attack = function(x, y) {
   }
   this.turns.push([x, y]);
   this.save();
-  currentScore.textContent = 'Score: ' + this.score;
+  currentScore.textContent = this.score;
 };
 
 Player.prototype.getName = function () {
   this.name = prompt('Let\'s get started! What is your name?');
-  return;
+  player.save();
+  localStorage.setItem('playerName', this.name);
 };
 
 
@@ -333,5 +334,9 @@ var count = 10;
 turn.textContent = 'Turns left: ' + count;
 
 var player = new Player();
-currentScore.textContent = 'Score: ' + player.score;
-// player.getName();
+
+if (localStorage.getItem('playerName') === null){
+  player.getName();
+} else {
+  player.name = localStorage.getItem('playerName');
+}
