@@ -2,11 +2,13 @@
 
 // DOM interaction code
 
-
 var currentScore = document.getElementById('current_score');
 
 var fire = document.getElementById('fire');
 fire.addEventListener('submit', fireMissles);
+
+var feedback = document.getElementById('feedback');
+var turn = document.getElementById('turn');
 
 var resetButton = document.getElementById('resetButton');
 
@@ -16,7 +18,6 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
 });
-
 
 // functions declarations
 
@@ -66,12 +67,12 @@ function fireMissles (event) {
   var y = parseInt(event.target.y.value);
   player.attack(x, y);
   count--;
-  console.log(count);
-
+  turn.textContent = 'Turns left: ' + count;
 }
 
 
 // Object Constructors
+
 
 // Coord constructor
 
@@ -106,6 +107,7 @@ Coord.prototype.checkSub = function () {
     return false;
   }
 };
+
 
 // GameBoard constructor
 
@@ -188,6 +190,7 @@ GameBoard.prototype.guessed = function (x,y) {
   return this.grid[x - 1][y - 1].checkSub();
 };
 
+
 // Sub constructor
 
 function Sub(length) {
@@ -266,13 +269,14 @@ Sub.prototype.getLocation = function() {
 function Player() {
   if (localStorage.getItem('player') === null) {
     this.name = name;
-    this.score = score;
+    this.score = 0;
     this.turns = [];
     this.save();
   }else {
     this.restore();
   }
 }
+
 
 // Player constructor
 
@@ -295,11 +299,10 @@ Player.prototype.attack = function(x, y) {
   if(result === true) {
     // Game Over!
     sub.hit();
-    alert('Hit!');
+    feedback.textContent = 'Hit!';
     this.score++;
-    score = this.score;
   } else {
-    alert('Miss!');
+    feedback.textContent = 'Miss!';
   }
   if(sub.alive === false) {
     alert('You destroyed the sub!');
@@ -308,9 +311,7 @@ Player.prototype.attack = function(x, y) {
   }
   this.turns.push([x, y]);
   this.save();
-  console.log(this.score);
-  console.log(player.score);
-  currentScore.textContent = score;
+  currentScore.textContent = 'Score: ' + this.score;
 };
 
 Player.prototype.getName = function () {
@@ -318,18 +319,19 @@ Player.prototype.getName = function () {
   return;
 };
 
+
 // Program flow
 
 var board = new GameBoard(10);
 makeGridTable(board);
 board.updateBoard();
 
-var score = 0;
+
 var sub = new Sub(3);
 
 var count = 10;
-
-console.log(this.score);
+turn.textContent = 'Turns left: ' + count;
 
 var player = new Player();
-player.getName();
+currentScore.textContent = 'Score: ' + player.score;
+// player.getName();
