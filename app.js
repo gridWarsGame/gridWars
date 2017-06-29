@@ -296,4 +296,10 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('board');
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
+  player.getName();
 });
+
+Player.prototype.getName = function () {
+  this.name = prompt('Let\'s get started! What is your name?');
+  return this.name;
+}
