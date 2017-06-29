@@ -1,5 +1,26 @@
 'use strict';
 
+// DOM interaction code
+
+
+var currentScore = document.getElementById('current_score');
+// currentScore.textContent = 'Score ' + score;
+
+var fire = document.getElementById('fire');
+fire.addEventListener('submit', fireMissles);
+
+var resetButton = document.getElementById('resetButton');
+
+resetButton.addEventListener('click', function() {
+  location.reload();
+  localStorage.removeItem('board');
+  localStorage.removeItem('sub');
+  localStorage.removeItem('player');
+});
+
+
+// functions declarations
+
 function makeGridTable(board) {
 
   var size = board.size;
@@ -33,6 +54,43 @@ function makeGridTable(board) {
   domTarget.appendChild(table);
 }
 
+
+function fireMissles (event) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (count === 0) {
+    alert('You Lose!');
+    fire.removeEventListener('submit', fireMissles);
+    return;
+  }
+  var x = parseInt(event.target.x.value);
+  var y = parseInt(event.target.y.value);
+  player.attack(x, y);
+  count--;
+  console.log(count);
+
+}
+
+
+// Object Constructors
+
+// Coord constructor
+
+function Coord (object) {
+  if(object) {
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        this[key] = object[key];
+      }
+    }
+  }else {
+    //the default is unseen; once coordinate is picked, status ==== hit || miss.
+    this.status = 'unseen';
+    //this tells whether there is a sub at this location.
+    this.sub = false;
+  }
+}
+
 Coord.prototype.checkSub = function () {
   if (this.status == 'unseen') {
     if (this.sub){
@@ -49,6 +107,8 @@ Coord.prototype.checkSub = function () {
     return false;
   }
 };
+
+// GameBoard constructor
 
 function GameBoard(size) {
   if (localStorage.getItem('board') === null){
@@ -129,29 +189,7 @@ GameBoard.prototype.guessed = function (x,y) {
   return this.grid[x - 1][y - 1].checkSub();
 };
 
-function Coord (object) {
-  if(object) {
-    for (var key in object) {
-      if (object.hasOwnProperty(key)) {
-        this[key] = object[key];
-      }
-    }
-  }else {
-    //the default is unseen; once coordinate is picked, status ==== hit || miss.
-    this.status = 'unseen';
-    //this tells whether there is a sub at this location.
-    this.sub = false;
-  }
-}
-
-var board = new GameBoard(10);
-makeGridTable(board);
-board.updateBoard();
-
-// paste from player.js
-var score = 0;
-var currentScore = document.getElementById('current_score');
-// currentScore.textContent = 'Score ' + score;
+// Sub constructor
 
 function Sub(length) {
   if (localStorage.getItem('sub') === null) {
@@ -226,10 +264,6 @@ Sub.prototype.getLocation = function() {
   return [x, y];
 };
 
-var sub = new Sub(3);
-
-var count = 10;
-
 function Player() {
   if (localStorage.getItem('player') === null) {
     this.name = name;
@@ -240,6 +274,8 @@ function Player() {
     this.restore();
   }
 }
+
+// Player constructor
 
 Player.prototype.save = function() {
   localStorage.setItem('player', JSON.stringify(this));
@@ -275,36 +311,21 @@ Player.prototype.attack = function(x, y) {
   this.save();
   console.log(this.score);
   console.log(player.score);
-  currentScore.textContent = 'Score ' + score;  
+  currentScore.textContent = 'Score ' + score;
 };
+
+
+// Program flow
+
+var board = new GameBoard(10);
+makeGridTable(board);
+board.updateBoard();
+
+var score = 0;
+var sub = new Sub(3);
+
+var count = 10;
+
 console.log(this.score);
 
 var player = new Player();
-
-var fire = document.getElementById('fire');
-fire.addEventListener('submit', fireMissles);
-
-function fireMissles (event) {
-  event.preventDefault();
-  event.stopPropagation();
-  if (count === 0) {
-    alert('You Lose!');
-    fire.removeEventListener('submit', fireMissles);
-    return;
-  }
-  var x = parseInt(event.target.x.value);
-  var y = parseInt(event.target.y.value);
-  player.attack(x, y);
-  count--;
-  console.log(count);
-
-}
-
-var resetButton = document.getElementById('resetButton');
-resetButton.addEventListener('click', function() {
-  location.reload();
-  localStorage.removeItem('board');
-  localStorage.removeItem('sub');
-  localStorage.removeItem('player');
-});
-
