@@ -28,15 +28,20 @@ Coord.prototype.checkSub = function () {
     if (this.sub){
       this.status = 'hit';
       this.squareRef.textContent = 'X';
-      return true;
+      alert('Hit!');
+      for (var i = 0; i < this.subList.length; i++) {
+        subArray[this.subList[i]].hit();
+      }
+      player.updateScore();
     }
-    this.status = 'miss';
-    this.squareRef.textContent = 'O';
-    return false;
+    else {
+      alert('Miss!');
+      this.status = 'miss';
+      this.squareRef.textContent = 'O';
+    }
   }
   else {
     alert('You need to pick a different square!');
-    return false;
   }
 };
 
@@ -109,9 +114,10 @@ GameBoard.prototype.createGrid = function (size) {
   }
 };
 
-GameBoard.prototype.addSub = function (x, y) {
+GameBoard.prototype.addSub = function (x, y, index) {
   //subtract one so that grid coordinates start at 1.
   this.grid[x][y].sub = true;
+  this.grid[x][y].subList.push(index);
 };
 
 GameBoard.prototype.guessed = function (x,y) {
@@ -131,6 +137,7 @@ function Coord (object) {
     this.status = 'unseen';
     //this tells whether there is a sub at this location.
     this.sub = false;
+    this.subList = [];
   }
 }
 
@@ -142,17 +149,18 @@ board.updateBoard();
 var score = 0;
 
 function Sub(length) {
-  if (localStorage.getItem('sub') === null) {
+  // if (localStorage.getItem('sub') === null) {
     this.alive = true;
     this.length = length;
     this.lifePoints = this.length;
     this.orientation = this.getOriention();
     this.location = this.getLocation();
-    this.save();
-  } else {
-    this.restore();
-  }
-  this.addToBoard();
+    this.shown = false;
+    // this.save();
+  // } else {
+  //   this.restore();
+  // }
+  // this.addToBoard();
 }
 
 Sub.prototype.save = function() {
@@ -185,13 +193,13 @@ Sub.prototype.hit = function() {
   this.save();
 };
 
-Sub.prototype.addToBoard = function() {
+Sub.prototype.addToBoard = function(index) {
   // setting physical location of sub on board.
   var x = this.location[0];
   var y = this.location[1];
   for (var i = 0; i < this.length; i++) {
     console.log(x,y);
-    board.addSub(x, y);
+    board.addSub(x, y, index);
     if (this.orientation === 'north-south') {
       y++;
     } else {
@@ -214,9 +222,13 @@ Sub.prototype.getLocation = function() {
   return [x, y];
 };
 
-var sub = new Sub(3);
+var subArray = [new Sub(3), new Sub(3), new Sub(3), new Sub(3), new Sub(3)];
 
-var count = 10;
+for (var index in subArray) {
+  subArray[index].addToBoard(index);
+}
+
+var count = 20;
 
 function Player() {
   if (localStorage.getItem('player') === null) {
@@ -245,24 +257,20 @@ Player.prototype.restore = function(){
 Player.prototype.attack = function(x, y) {
   var result = board.guessed(x, y);
   board.save();
-  if(result === true) {
-    // Game Over!
-    sub.hit();
-    alert('Hit!');
-    player.updateScore();
-  } else {
-    alert('Miss!');
-  }
-  if(sub.alive === false) {
-    alert('You destroyed the sub!');
-    player.updateScore();
-    fire.removeEventListener('submit', fireMissles);
-    result = false;
+  for (var i = 0; i < subArray.length; i++){
+    var sub = subArray[i];
+    if(sub.alive === false && sub.shown == false) {
+      alert('You destroyed a sub!');
+      sub.shown = true;
+      player.updateScore();
+    }
   }
   this.turns.push([x, y]);
   this.save();
 };
+
 var total = 0;
+
 Player.prototype.updateScore = function() {
   score = count;
   total += score;
