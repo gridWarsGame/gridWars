@@ -1,24 +1,31 @@
-body{
+body {
   text-align: center;
-}
-table{
-  margin-left: auto;
-  margin-right:auto;
-  background: lightgray;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url("../images/Beach_stones_and_sand.JPG");
 }
 
-td{
+table {
+  margin-left: auto;
+  margin-right:auto;
+  background: url("../images/watertile.jpg");
+}
+
+td {
+  color: yellow;
   border: 2px solid darkblue;
   width: 50px;
   height: 50px;
   text-align: center;
-  font-size: 48px
+  font-size: 48px;
 }
+
 tr:nth-child(odd) td:nth-child(even) {
-  background: powderblue;
+  background: url("../images/flippedwatertile.jpg");
 }
+
 tr:nth-child(even) td:nth-child(odd) {
-  background: cadetblue;
+  background: url("../images/flippedwatertile.jpg");
 }
 
 input, button {
@@ -28,11 +35,25 @@ input, button {
   text-align: center;
 }
 
-#home {
+.scoreboard {
+  color: Darkblue;
+  border: 2px solid darkblue;
   position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 1em;
+  top: 0;
+  right: 12%;
+}
+
+#home {
+  border: 2px solid darkblue;
+  text-decoration: none;
+  position: absolute;
+  top: 0;
+  left: 10%;
+  padding: .5em;
   font-size: 25px;
   color: darkblue;
+}
+
+ul {
+  list-style: none;
 }
