@@ -46,9 +46,9 @@ function GameBoard(size) {
     this.grid = [];
     this.setupBoard(size);
     this.save();
-    console.log('being created');
+    console.log('New game being created...');
   }else {
-    console.log('being restored');
+    console.log('Game being restored...');
     this.restore();
     this.setupBoard(size);
   }
@@ -190,7 +190,7 @@ Sub.prototype.addToBoard = function() {
   var x = this.location[0];
   var y = this.location[1];
   for (var i = 0; i < this.length; i++) {
-    console.log(x,y);
+    console.log('Sub Coords: [' + (x+1) + ', ' + (y+1) + ']');
     board.addSub(x, y);
     if (this.orientation === 'north-south') {
       y++;
