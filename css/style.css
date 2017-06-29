@@ -21,6 +21,11 @@ td {
   font-size: 48px;
 }
 
+th {
+  color: orange;
+  font-size: 20px;
+}
+
 tr:nth-child(odd) td:nth-child(even) {
   background: url("../images/flippedwatertile.jpg");
 }
