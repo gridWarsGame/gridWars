@@ -314,6 +314,10 @@ Player.prototype.attack = function(x, y) {
   currentScore.textContent = 'Score ' + score;
 };
 
+Player.prototype.getName = function () {
+  this.name = prompt('Let\'s get started! What is your name?');
+  return;
+};
 
 // Program flow
 
@@ -329,3 +333,4 @@ var count = 10;
 console.log(this.score);
 
 var player = new Player();
+player.getName();
