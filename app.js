@@ -3,7 +3,6 @@
 // DOM interaction code
 
 var currentScore = document.getElementById('current_score');
-// currentScore.textContent = 'Score ' + score;
 
 var fire = document.getElementById('fire');
 fire.addEventListener('submit', fireMissles);
