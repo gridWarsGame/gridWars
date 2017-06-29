@@ -24,14 +24,20 @@ function makeGridTable(board) {
 }
 
 Coord.prototype.checkSub = function () {
-  if (this.sub){
-    this.status = 'hit';
-    this.squareRef.textContent = 'X';
-    return true;
+  if (this.status == 'unseen') {
+    if (this.sub){
+      this.status = 'hit';
+      this.squareRef.textContent = 'X';
+      return true;
+    }
+    this.status = 'miss';
+    this.squareRef.textContent = 'O';
+    return false;
   }
-  this.status = 'miss';
-  this.squareRef.textContent = 'O';
-  return false;
+  else {
+    alert('You need to pick a different square!');
+    return false;
+  }
 };
 
 function GameBoard(size) {
@@ -66,7 +72,7 @@ GameBoard.prototype.updateBoard = function () {
     for (var j = 0; j < this.size; j++) {
       var status = this.grid[i][j].status ;
       var squareRef = this.grid[i][j].squareRef;
-      
+
       if(status === 'miss'){
         squareRef.textContent = 'O';
       }else if(status === 'hit'){
@@ -244,13 +250,14 @@ Player.prototype.attack = function(x, y) {
     sub.hit();
     alert('Hit!');
     player.updateScore();
-    if(sub.alive === false) {
-      alert('You destroyed the sub!');
-      player.updateScore();
-      fire.removeEventListener('submit', fireMissles);
-    }
   } else {
     alert('Miss!');
+  }
+  if(sub.alive === false) {
+    alert('You destroyed the sub!');
+    player.updateScore();
+    fire.removeEventListener('submit', fireMissles);
+    result = false;
   }
   this.turns.push([x, y]);
   this.save();
@@ -269,12 +276,13 @@ var fire = document.getElementById('fire');
 fire.addEventListener('submit', fireMissles);
 
 function fireMissles (event) {
+  event.preventDefault();
+  event.stopPropagation();
   if (count === 0) {
     alert('You Lose!');
     fire.removeEventListener('submit', fireMissles);
+    return;
   }
-  event.preventDefault();
-  event.stopPropagation();
   var x = parseInt(event.target.x.value);
   var y = parseInt(event.target.y.value);
   player.attack(x, y);
