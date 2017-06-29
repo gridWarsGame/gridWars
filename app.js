@@ -1,5 +1,26 @@
 'use strict';
 
+// DOM interaction code
+
+var currentScore = document.getElementById('current_score');
+
+var fire = document.getElementById('fire');
+fire.addEventListener('submit', fireMissles);
+
+var feedback = document.getElementById('feedback');
+var turn = document.getElementById('turn');
+
+var resetButton = document.getElementById('resetButton');
+
+resetButton.addEventListener('click', function() {
+  location.reload();
+  localStorage.removeItem('board');
+  localStorage.removeItem('sub');
+  localStorage.removeItem('player');
+});
+
+// functions declarations
+
 function makeGridTable(board) {
 
   var size = board.size;
@@ -33,6 +54,43 @@ function makeGridTable(board) {
   domTarget.appendChild(table);
 }
 
+
+function fireMissles (event) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (count === 0) {
+    alert('You Lose!');
+    fire.removeEventListener('submit', fireMissles);
+    return;
+  }
+  var x = parseInt(event.target.x.value);
+  var y = parseInt(event.target.y.value);
+  player.attack(x, y);
+  count--;
+  turn.textContent = 'Turns left: ' + count;
+}
+
+
+// Object Constructors
+
+
+// Coord constructor
+
+function Coord (object) {
+  if(object) {
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        this[key] = object[key];
+      }
+    }
+  }else {
+    //the default is unseen; once coordinate is picked, status ==== hit || miss.
+    this.status = 'unseen';
+    //this tells whether there is a sub at this location.
+    this.sub = false;
+  }
+}
+
 Coord.prototype.checkSub = function () {
   if (this.status == 'unseen') {
     if (this.sub){
@@ -49,6 +107,9 @@ Coord.prototype.checkSub = function () {
     return false;
   }
 };
+
+
+// GameBoard constructor
 
 function GameBoard(size) {
   if (localStorage.getItem('board') === null){
@@ -129,29 +190,8 @@ GameBoard.prototype.guessed = function (x,y) {
   return this.grid[x - 1][y - 1].checkSub();
 };
 
-function Coord (object) {
-  if(object) {
-    for (var key in object) {
-      if (object.hasOwnProperty(key)) {
-        this[key] = object[key];
-      }
-    }
-  }else {
-    //the default is unseen; once coordinate is picked, status ==== hit || miss.
-    this.status = 'unseen';
-    //this tells whether there is a sub at this location.
-    this.sub = false;
-  }
-}
 
-var board = new GameBoard(10);
-makeGridTable(board);
-board.updateBoard();
-
-// paste from player.js
-var score = 0;
-var currentScore = document.getElementById('current_score');
-// currentScore.textContent = 'Score ' + score;
+// Sub constructor
 
 function Sub(length) {
   if (localStorage.getItem('sub') === null) {
@@ -226,20 +266,19 @@ Sub.prototype.getLocation = function() {
   return [x, y];
 };
 
-var sub = new Sub(3);
-
-var count = 10;
-
 function Player() {
   if (localStorage.getItem('player') === null) {
     this.name = name;
-    this.score = score;
+    this.score = 0;
     this.turns = [];
     this.save();
   }else {
     this.restore();
   }
 }
+
+
+// Player constructor
 
 Player.prototype.save = function() {
   localStorage.setItem('player', JSON.stringify(this));
@@ -260,11 +299,10 @@ Player.prototype.attack = function(x, y) {
   if(result === true) {
     // Game Over!
     sub.hit();
-    alert('Hit!');
+    feedback.textContent = 'Hit!';
     this.score++;
-    score = this.score;
   } else {
-    alert('Miss!');
+    feedback.textContent = 'Miss!';
   }
   if(sub.alive === false) {
     alert('You destroyed the sub!');
@@ -273,38 +311,32 @@ Player.prototype.attack = function(x, y) {
   }
   this.turns.push([x, y]);
   this.save();
-  console.log(this.score);
-  console.log(player.score);
-  currentScore.textContent = 'Score ' + score;  
+  currentScore.textContent = this.score;
 };
-console.log(this.score);
+
+Player.prototype.getName = function () {
+  this.name = prompt('Let\'s get started! What is your name?');
+  player.save();
+  localStorage.setItem('playerName', this.name);
+};
+
+
+// Program flow
+
+var board = new GameBoard(10);
+makeGridTable(board);
+board.updateBoard();
+
+
+var sub = new Sub(3);
+
+var count = 10;
+turn.textContent = 'Turns left: ' + count;
 
 var player = new Player();
 
-var fire = document.getElementById('fire');
-fire.addEventListener('submit', fireMissles);
-
-function fireMissles (event) {
-  event.preventDefault();
-  event.stopPropagation();
-  if (count === 0) {
-    alert('You Lose!');
-    fire.removeEventListener('submit', fireMissles);
-    return;
-  }
-  var x = parseInt(event.target.x.value);
-  var y = parseInt(event.target.y.value);
-  player.attack(x, y);
-  count--;
-  console.log(count);
-
+if (localStorage.getItem('playerName') === null){
+  player.getName();
+} else {
+  player.name = localStorage.getItem('playerName');
 }
-
-var resetButton = document.getElementById('resetButton');
-resetButton.addEventListener('click', function() {
-  location.reload();
-  localStorage.removeItem('board');
-  localStorage.removeItem('sub');
-  localStorage.removeItem('player');
-});
-

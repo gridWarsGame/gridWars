@@ -11,10 +11,25 @@ var myChart = new Chart(ctx, {
     }]
   },
   options: {
+    legend: {
+      labels: {
+        fontColor: 'red',
+        labelFontWeight: 'bold'
+      }
+    },
     scales: {
+      xAxes: [{
+        gridLines: {
+          color: 'white',
+        },
+      }],
       yAxes: [{
+        gridLines: {
+          color: 'white',
+        },
         ticks: {
-          max: 20,
+          fontColor: 'white',
+          max: 15,
           min: 0,
           stepSize: 1
         }
