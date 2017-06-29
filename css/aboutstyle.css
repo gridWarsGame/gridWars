@@ -1,0 +1,7 @@
+body {
+  background-image: url("../images/Beach_stones_and_sand.JPG");
+}
+
+#chart {
+  background-color: hsla(270, 100%, 100%, 0.5);
+}
