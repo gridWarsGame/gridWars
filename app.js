@@ -7,8 +7,18 @@ function makeGridTable(board) {
   var domTarget = document.getElementById('grid_table');
   var table = document.createElement('table');
 
-  for (var i = 0; i < size; i++) {
+  for (var i = 0; i <= size; i++){
+    var th = document.createElement('th');
+    th.textContent = i;
+    table.appendChild(th);
+  }
+
+  for (i = 0; i < size; i++) {
     var row = document.createElement('tr');
+
+    var rowHeader = document.createElement('th');
+    rowHeader.textContent = i+1;
+    row.appendChild(rowHeader);
 
     for (var j = 0; j < size; j++) {
       var square = document.createElement('td');
