@@ -271,6 +271,7 @@ Player.prototype.updateScore = function() {
 };
 
 var player = new Player();
+player.getName();
 
 var fire = document.getElementById('fire');
 fire.addEventListener('submit', fireMissles);
@@ -296,10 +297,9 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('board');
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
-  player.getName();
 });
 
 Player.prototype.getName = function () {
   this.name = prompt('Let\'s get started! What is your name?');
-  return; 
-}
+  return;
+};
