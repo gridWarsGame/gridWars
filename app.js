@@ -301,5 +301,5 @@ resetButton.addEventListener('click', function() {
 
 Player.prototype.getName = function () {
   this.name = prompt('Let\'s get started! What is your name?');
-  return this.name;
+  return; 
 }
