@@ -11,10 +11,15 @@ var myChart = new Chart(ctx, {
     }]
   },
   options: {
+    legend: {
+      labels: {
+        fontColor: 'red'
+      }
+    },
     scales: {
       yAxes: [{
         ticks: {
-          max: 20,
+          max: 15,
           min: 0,
           stepSize: 1
         }
