@@ -7,8 +7,18 @@ function makeGridTable(board) {
   var domTarget = document.getElementById('grid_table');
   var table = document.createElement('table');
 
-  for (var i = 0; i < size; i++) {
+  for (var i = 0; i <= size; i++){
+    var th = document.createElement('th');
+    th.textContent = i;
+    table.appendChild(th);
+  }
+
+  for (i = 0; i < size; i++) {
     var row = document.createElement('tr');
+
+    var rowHeader = document.createElement('th');
+    rowHeader.textContent = i+1;
+    row.appendChild(rowHeader);
 
     for (var j = 0; j < size; j++) {
       var square = document.createElement('td');
@@ -46,9 +56,9 @@ function GameBoard(size) {
     this.grid = [];
     this.setupBoard(size);
     this.save();
-    console.log('being created');
+    console.log('New game being created...');
   }else {
-    console.log('being restored');
+    console.log('Game being restored...');
     this.restore();
     this.setupBoard(size);
   }
@@ -140,6 +150,8 @@ board.updateBoard();
 
 // paste from player.js
 var score = 0;
+var currentScore = document.getElementById('current_score');
+// currentScore.textContent = 'Score ' + score;
 
 function Sub(length) {
   if (localStorage.getItem('sub') === null) {
@@ -190,7 +202,7 @@ Sub.prototype.addToBoard = function() {
   var x = this.location[0];
   var y = this.location[1];
   for (var i = 0; i < this.length; i++) {
-    console.log(x,y);
+    console.log('Sub Coords: [' + (x+1) + ', ' + (y+1) + ']');
     board.addSub(x, y);
     if (this.orientation === 'north-south') {
       y++;
@@ -249,26 +261,23 @@ Player.prototype.attack = function(x, y) {
     // Game Over!
     sub.hit();
     alert('Hit!');
-    player.updateScore();
+    this.score++;
+    score = this.score;
   } else {
     alert('Miss!');
   }
   if(sub.alive === false) {
     alert('You destroyed the sub!');
-    player.updateScore();
     fire.removeEventListener('submit', fireMissles);
     result = false;
   }
   this.turns.push([x, y]);
   this.save();
+  console.log(this.score);
+  console.log(player.score);
+  currentScore.textContent = 'Score ' + score;  
 };
-var total = 0;
-Player.prototype.updateScore = function() {
-  score = count;
-  total += score;
-  var scoreboard = document.getElementById('scoreboard');
-  scoreboard.textContent = total;
-};
+console.log(this.score);
 
 var player = new Player();
 
@@ -288,6 +297,7 @@ function fireMissles (event) {
   player.attack(x, y);
   count--;
   console.log(count);
+
 }
 
 var resetButton = document.getElementById('resetButton');
@@ -297,3 +307,4 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
 });
+
