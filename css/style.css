@@ -62,7 +62,27 @@ button:focus {
   outline: 0;
 }
 
-.board {
+#resetButton {
+  color: red;
+  background-color: white;
+  border-radius: 10px;
+  border-top: 4px;
+  border-right: 0px;
+  position: relative;
+  box-shadow: 0px 5px 0px #414442;
+}
+
+#resetButton:active {
+  position: relative;
+  border-bottom: 3px;
+  border-right: 1px;
+  box-shadow: 0 3px 0 #414442;
+  transition: all ease 0.2s;
+}
+
+
+
+.scoreboard {
   text-align: center;
   color: darkblue;
   border: 2px solid darkblue;
@@ -90,7 +110,11 @@ button:focus {
   background-color: hsla(270, 100%, 100%, 0.5);
 }
 
-p {
-  font-size: 30px;
-  color: blue;
+ul {
+  list-style: none;
+}
+
+#current_score {
+  font-size: 40px;
+  color: yellow;
 }
