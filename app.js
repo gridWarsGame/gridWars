@@ -4,7 +4,6 @@
 
 
 var currentScore = document.getElementById('current_score');
-// currentScore.textContent = 'Score ' + score;
 
 var fire = document.getElementById('fire');
 fire.addEventListener('submit', fireMissles);
@@ -311,7 +310,7 @@ Player.prototype.attack = function(x, y) {
   this.save();
   console.log(this.score);
   console.log(player.score);
-  currentScore.textContent = 'Score ' + score;
+  currentScore.textContent = score;
 };
 
 Player.prototype.getName = function () {

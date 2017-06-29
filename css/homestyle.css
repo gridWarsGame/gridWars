@@ -23,6 +23,10 @@ span {
   color: black;
 }
 
+a:focus {
+  outline: 0;
+}
+
 a {
   font-size: 50px;
   position: relative;
@@ -32,6 +36,16 @@ a {
   text-decoration: none;
   background: green;
   border-radius: 10px;
+  border-top: 4px;
+  border-right: 0px;
   box-shadow: 0px 5px 0px #414442;
   padding: 10px;
+}
+
+a:active {
+  position: relative;
+  border-bottom: 4px;
+  border-right: 1px;
+  box-shadow: 0 3px 0 #414442;
+  transition: all ease 0.2s;
 }
