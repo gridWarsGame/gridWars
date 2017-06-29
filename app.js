@@ -275,8 +275,8 @@ function Player() {
   }else {
     this.restore();
   }
+  currentScore.textContent = this.score;
 }
-
 
 // Player constructor
 
@@ -326,7 +326,6 @@ Player.prototype.getName = function () {
 var board = new GameBoard(10);
 makeGridTable(board);
 board.updateBoard();
-
 
 var sub = new Sub(3);
 
