@@ -1,5 +1,26 @@
 'use strict';
 
+// DOM interaction code
+
+
+var currentScore = document.getElementById('current_score');
+// currentScore.textContent = 'Score ' + score;
+
+var fire = document.getElementById('fire');
+fire.addEventListener('submit', fireMissles);
+
+var resetButton = document.getElementById('resetButton');
+
+resetButton.addEventListener('click', function() {
+  location.reload();
+  localStorage.removeItem('board');
+  localStorage.removeItem('sub');
+  localStorage.removeItem('player');
+});
+
+
+// functions declarations
+
 function makeGridTable(board) {
 
   var size = board.size;
@@ -7,8 +28,18 @@ function makeGridTable(board) {
   var domTarget = document.getElementById('grid_table');
   var table = document.createElement('table');
 
-  for (var i = 0; i < size; i++) {
+  for (var i = 0; i <= size; i++){
+    var th = document.createElement('th');
+    th.textContent = i;
+    table.appendChild(th);
+  }
+
+  for (i = 0; i < size; i++) {
     var row = document.createElement('tr');
+
+    var rowHeader = document.createElement('th');
+    rowHeader.textContent = i+1;
+    row.appendChild(rowHeader);
 
     for (var j = 0; j < size; j++) {
       var square = document.createElement('td');
@@ -21,6 +52,43 @@ function makeGridTable(board) {
     table.appendChild(row);
   }
   domTarget.appendChild(table);
+}
+
+
+function fireMissles (event) {
+  event.preventDefault();
+  event.stopPropagation();
+  if (count === 0) {
+    alert('You Lose!');
+    fire.removeEventListener('submit', fireMissles);
+    return;
+  }
+  var x = parseInt(event.target.x.value);
+  var y = parseInt(event.target.y.value);
+  player.attack(x, y);
+  count--;
+  console.log(count);
+
+}
+
+
+// Object Constructors
+
+// Coord constructor
+
+function Coord (object) {
+  if(object) {
+    for (var key in object) {
+      if (object.hasOwnProperty(key)) {
+        this[key] = object[key];
+      }
+    }
+  }else {
+    //the default is unseen; once coordinate is picked, status ==== hit || miss.
+    this.status = 'unseen';
+    //this tells whether there is a sub at this location.
+    this.sub = false;
+  }
 }
 
 Coord.prototype.checkSub = function () {
@@ -40,15 +108,17 @@ Coord.prototype.checkSub = function () {
   }
 };
 
+// GameBoard constructor
+
 function GameBoard(size) {
   if (localStorage.getItem('board') === null){
     this.size = size;
     this.grid = [];
     this.setupBoard(size);
     this.save();
-    console.log('being created');
+    console.log('New game being created...');
   }else {
-    console.log('being restored');
+    console.log('Game being restored...');
     this.restore();
     this.setupBoard(size);
   }
@@ -119,27 +189,7 @@ GameBoard.prototype.guessed = function (x,y) {
   return this.grid[x - 1][y - 1].checkSub();
 };
 
-function Coord (object) {
-  if(object) {
-    for (var key in object) {
-      if (object.hasOwnProperty(key)) {
-        this[key] = object[key];
-      }
-    }
-  }else {
-    //the default is unseen; once coordinate is picked, status ==== hit || miss.
-    this.status = 'unseen';
-    //this tells whether there is a sub at this location.
-    this.sub = false;
-  }
-}
-
-var board = new GameBoard(10);
-makeGridTable(board);
-board.updateBoard();
-
-// paste from player.js
-var score = 0;
+// Sub constructor
 
 function Sub(length) {
   if (localStorage.getItem('sub') === null) {
@@ -190,7 +240,7 @@ Sub.prototype.addToBoard = function() {
   var x = this.location[0];
   var y = this.location[1];
   for (var i = 0; i < this.length; i++) {
-    console.log(x,y);
+    console.log('Sub Coords: [' + (x+1) + ', ' + (y+1) + ']');
     board.addSub(x, y);
     if (this.orientation === 'north-south') {
       y++;
@@ -214,10 +264,6 @@ Sub.prototype.getLocation = function() {
   return [x, y];
 };
 
-var sub = new Sub(3);
-
-var count = 10;
-
 function Player() {
   if (localStorage.getItem('player') === null) {
     this.name = name;
@@ -228,6 +274,8 @@ function Player() {
     this.restore();
   }
 }
+
+// Player constructor
 
 Player.prototype.save = function() {
   localStorage.setItem('player', JSON.stringify(this));
@@ -249,56 +297,40 @@ Player.prototype.attack = function(x, y) {
     // Game Over!
     sub.hit();
     alert('Hit!');
-    player.updateScore();
+    this.score++;
+    score = this.score;
   } else {
     alert('Miss!');
   }
   if(sub.alive === false) {
     alert('You destroyed the sub!');
-    player.updateScore();
     fire.removeEventListener('submit', fireMissles);
     result = false;
   }
   this.turns.push([x, y]);
   this.save();
-};
-var total = 0;
-Player.prototype.updateScore = function() {
-  score = count;
-  total += score;
-  var scoreboard = document.getElementById('scoreboard');
-  scoreboard.textContent = total;
+  console.log(this.score);
+  console.log(player.score);
+  currentScore.textContent = 'Score ' + score;
 };
 
 Player.prototype.getName = function () {
   this.name = prompt('Let\'s get started! What is your name?');
   return;
 };
+
+// Program flow
+
+var board = new GameBoard(10);
+makeGridTable(board);
+board.updateBoard();
+
+var score = 0;
+var sub = new Sub(3);
+
+var count = 10;
+
+console.log(this.score);
+
 var player = new Player();
 player.getName();
-
-var fire = document.getElementById('fire');
-fire.addEventListener('submit', fireMissles);
-
-function fireMissles (event) {
-  event.preventDefault();
-  event.stopPropagation();
-  if (count === 0) {
-    alert('You Lose!');
-    fire.removeEventListener('submit', fireMissles);
-    return;
-  }
-  var x = parseInt(event.target.x.value);
-  var y = parseInt(event.target.y.value);
-  player.attack(x, y);
-  count--;
-  console.log(count);
-}
-
-var resetButton = document.getElementById('resetButton');
-resetButton.addEventListener('click', function() {
-  location.reload();
-  localStorage.removeItem('board');
-  localStorage.removeItem('sub');
-  localStorage.removeItem('player');
-});
