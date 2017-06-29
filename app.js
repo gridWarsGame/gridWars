@@ -276,6 +276,7 @@ Player.prototype.getName = function () {
 };
 var player = new Player();
 player.getName();
+localStorage.setItem(player.name);
 
 var fire = document.getElementById('fire');
 fire.addEventListener('submit', fireMissles);
