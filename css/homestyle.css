@@ -1,0 +1,37 @@
+body {
+background: silver;
+scroll-behavior: none;
+}
+
+#heading {
+  position: relative;
+  left: 35%;
+}
+
+h1 {
+  color: white;
+  width: 11%;
+  font-size: 72px;
+  font-weight: 700;
+  border: 2px solid black;
+  text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+  font-family: 'Allerta Stencil', sans-serif;
+  background-color: black;
+}
+
+span {
+  color: black;
+}
+
+a {
+  font-size: 50px;
+  position: relative;
+  left: 40%;
+  height: 50px;
+  color: white;
+  text-decoration: none;
+  background: green;
+  border-radius: 10px;
+  box-shadow: 0px 5px 0px #414442;
+  padding: 10px;
+}
