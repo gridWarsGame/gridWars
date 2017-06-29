@@ -222,10 +222,12 @@ Sub.prototype.getLocation = function() {
   return [x, y];
 };
 
-var subArray = [new Sub(3), new Sub(3), new Sub(3), new Sub(3), new Sub(3)];
+var subArray = [];
 
-for (var index in subArray) {
-  subArray[index].addToBoard(index);
+for (var i = 0; i < 10; i++) {
+  var sub = new Sub(3);
+  sub.addToBoard(i);
+  subArray.push(sub);
 }
 
 var count = 20;
