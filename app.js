@@ -150,6 +150,8 @@ board.updateBoard();
 
 // paste from player.js
 var score = 0;
+var currentScore = document.getElementById('current_score');
+// currentScore.textContent = 'Score ' + score;
 
 function Sub(length) {
   if (localStorage.getItem('sub') === null) {
@@ -259,26 +261,23 @@ Player.prototype.attack = function(x, y) {
     // Game Over!
     sub.hit();
     alert('Hit!');
-    player.updateScore();
+    this.score++;
+    score = this.score;
   } else {
     alert('Miss!');
   }
   if(sub.alive === false) {
     alert('You destroyed the sub!');
-    player.updateScore();
     fire.removeEventListener('submit', fireMissles);
     result = false;
   }
   this.turns.push([x, y]);
   this.save();
+  console.log(this.score);
+  console.log(player.score);
+  currentScore.textContent = 'Score ' + score;  
 };
-var total = 0;
-Player.prototype.updateScore = function() {
-  score = count;
-  total += score;
-  var scoreboard = document.getElementById('scoreboard');
-  scoreboard.textContent = total;
-};
+console.log(this.score);
 
 var player = new Player();
 
