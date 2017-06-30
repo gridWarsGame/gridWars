@@ -2,6 +2,7 @@ body {
 background: silver;
 max-width: 800px;
 width: 100%;
+padding: 1em;
 }
 
 #heading {
@@ -52,12 +53,20 @@ a:focus {
   transition: all ease 0.2s;
 }
 
-a {
+#about {
   font-size: 25px;
   text-decoration: none;
   position: absolute;
   bottom: 10%;
   left: 5%;
+}
+
+#instruct {
+  font-size: 25px;
+  text-decoration: none;
+  position: absolute;
+  right: 5%;
+  bottom: 10%;
 }
 
 a:hover {
