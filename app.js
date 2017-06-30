@@ -28,7 +28,9 @@ function makeGridTable(board) {
   var domTarget = document.getElementById('grid_table');
   var table = document.createElement('table');
 
-  for (var i = 0; i <= size; i++){
+  table.appendChild(document.createElement('th'));
+  
+  for (var i = 1; i <= size; i++){
     var th = document.createElement('th');
     th.textContent = i;
     table.appendChild(th);
@@ -338,4 +340,11 @@ if (localStorage.getItem('playerName') === null){
   player.getName();
 } else {
   player.name = localStorage.getItem('playerName');
+}
+
+
+var saveArray = [];
+if ( count === 0 || sub.alive === false) {
+  saveArray.push(player.score);
+  localStorage.setItem('savedScore', JSON.stringify(saveArray));
 }
