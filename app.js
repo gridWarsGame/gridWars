@@ -29,7 +29,7 @@ function makeGridTable(board) {
   var table = document.createElement('table');
 
   table.appendChild(document.createElement('th'));
-  
+
   for (var i = 1; i <= size; i++){
     var th = document.createElement('th');
     th.textContent = i;
@@ -150,6 +150,33 @@ GameBoard.prototype.updateBoard = function () {
         squareRef.textContent = 'O';
       }else if(status === 'hit'){
         squareRef.textContent = 'X';
+      }
+    }
+  }
+};
+
+GameBoard.prototype.showSubs = function () {
+  for (var i = 0; i < this.size; i++) {
+    for (var j = 0; j < this.size; j++) {
+
+      var subTrueFalse = this.grid[i][j].sub;
+      var squareRef = this.grid[i][j].squareRef;
+      if (subTrueFalse){
+        squareRef.textContent = 'X';
+      }
+    }
+  }
+};
+
+GameBoard.prototype.hideUnseenSubs = function () {
+  for (var i = 0; i < this.size; i++) {
+    for (var j = 0; j < this.size; j++) {
+
+      var subTrueFalse = this.grid[i][j].sub;
+      var squareRef = this.grid[i][j].squareRef;
+      var status = this.grid[i][j].status;
+      if (subTrueFalse && status === 'unseen'){
+        squareRef.textContent = ' ';
       }
     }
   }
