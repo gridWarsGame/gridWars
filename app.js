@@ -68,11 +68,13 @@ function fireMissles (event) {
     fire.removeEventListener('submit', fireMissles);
     return;
   }
-  var x = parseInt(event.target.x.value);
-  var y = parseInt(event.target.y.value);
-  player.attack(x, y);
-  count--;
-  turn.textContent = 'Turns left: ' + count;
+  try {
+    var x = parseInt(event.target.x.value);
+    var y = parseInt(event.target.y.value);
+    player.attack(x, y);
+  } catch (e) {
+    alert('Enter a coordinate...');
+  }
 }
 
 // Object Constructors
@@ -105,6 +107,7 @@ Coord.prototype.checkSub = function () {
       feedback.textContent = 'Hit!';
 
       var subList = this.subList;
+      console.log(subList);
 
       for (var i = 0; i < subList.length; i++) {
         player.updateScore();
@@ -115,6 +118,9 @@ Coord.prototype.checkSub = function () {
     }
     feedback.textContent = 'Miss!';
     this.squareRef.textContent = 'O';
+    count--;
+    localStorage.setItem('count', count);
+    turn.textContent = 'Misses left: ' + count;
     return false;
   }
   else {
@@ -377,13 +383,18 @@ for (var i = 0; i < 5; i++) {
   }
   else {
     sub.restore(i);
-    sub.addToBoard(i);
   }
   subArray.push(sub);
 }
 
-var count = 10;
-turn.textContent = 'Turns left: ' + count;
+var count;
+
+if (localStorage.getItem('count') === null)
+  count = 10;
+else {
+  count = localStorage.getItem('count');
+}
+turn.textContent = 'Misses left: ' + count;
 
 var player = new Player();
 
