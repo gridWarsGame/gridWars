@@ -13,10 +13,13 @@ var turn = document.getElementById('turn');
 var resetButton = document.getElementById('resetButton');
 
 resetButton.addEventListener('click', function() {
-  location.reload();
   localStorage.removeItem('board');
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
+
+  player.getName();
+  player.name = localStorage.setItem('playerName', player.name);
+  location.reload();
 });
 
 // functions declarations
@@ -29,7 +32,7 @@ function makeGridTable(board) {
   var table = document.createElement('table');
 
   table.appendChild(document.createElement('th'));
-  
+
   for (var i = 1; i <= size; i++){
     var th = document.createElement('th');
     th.textContent = i;
