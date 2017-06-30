@@ -1,0 +1,65 @@
+body {
+background: silver;
+max-width: 800px;
+width: 100%;
+}
+
+#heading {
+  position: relative;
+  left: 60%;
+}
+
+h1 {
+  color: white;
+  width: 19%;
+  font-size: 72px;
+  font-weight: 700;
+  border: 2px solid black;
+  text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+  font-family: 'Allerta Stencil', sans-serif;
+  background-color: black;
+}
+
+span {
+  color: black;
+}
+
+a:focus {
+  outline: 0;
+}
+
+#play {
+  font-size: 50px;
+  position: relative;
+  top: 75%;
+  left: 70%;
+  height: 50px;
+  color: white;
+  text-decoration: none;
+  background: green;
+  border-radius: 10px;
+  border-top: 4px;
+  border-right: 0px;
+  box-shadow: 0px 5px 0px #414442;
+  padding: 10px;
+}
+
+#play:active {
+  position: relative;
+  border-bottom: 4px;
+  border-right: 1px;
+  box-shadow: 0 3px 0 #414442;
+  transition: all ease 0.2s;
+}
+
+a {
+  font-size: 25px;
+  text-decoration: none;
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+}
+
+a:hover {
+  color: yellow;
+}
