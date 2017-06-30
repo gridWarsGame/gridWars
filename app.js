@@ -107,7 +107,7 @@ Coord.prototype.checkSub = function () {
       feedback.textContent = 'Hit!';
 
       var subList = this.subList;
-      console.log(subList);
+      console.log('Subs Hit: ' + subList);
 
       for (var i = 0; i < subList.length; i++) {
         player.updateScore();
@@ -279,7 +279,6 @@ Sub.prototype.hit = function() {
   if (this.lifePoints === 0) {
     this.alive = false;
   }
-  this.save();
 };
 
 Sub.prototype.addToBoard = function(index) {
