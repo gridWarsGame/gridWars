@@ -5,7 +5,12 @@ body {
   background-repeat: no-repeat;
   background-image: url("../images/Beach_stones_and_sand.JPG");
 }
-
+p {
+  color:darkorange;
+}
+h1 {
+  color:darkblue;
+}
 table {
   margin-left: auto;
   margin-right: auto;
