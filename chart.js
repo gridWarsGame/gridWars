@@ -7,7 +7,7 @@ var myChart = new Chart(ctx, {
     datasets: [{
       label: 'gridWarrior',
       data: [1, 9, 3, 4, 6, 3, 7],
-      backgroundColor: "rgba(153,255,51,0.4)"
+      backgroundColor: "rgba(153,255,51,0.7)"
     }]
   },
   options: {

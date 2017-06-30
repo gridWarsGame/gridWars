@@ -1,7 +1,41 @@
 body {
   background-image: url("../images/Beach_stones_and_sand.JPG");
+  background-repeat: no-repeat;
+  background-size: cover;
+  max-width: 800px;
 }
 
 #chart {
   background-color: hsla(270, 100%, 100%, 0.5);
+}
+
+#heading {
+  position: relative;
+  left: 60%;
+}
+
+h1 {
+  color: white;
+  width: 19%;
+  font-size: 72px;
+  font-weight: 700;
+  border: 2px solid black;
+  text-shadow: 0px 1px 0px rgba(0,0,0,.5);
+  font-family: 'Allerta Stencil', sans-serif;
+  background-color: black;
+}
+
+#home {
+  position: absolute;
+  top: 0%;
+  left: 5%;
+}
+
+#game {
+  position: absolute;
+  top: 0%;
+  left: 10%;
+
+span {
+  color: black;
 }
