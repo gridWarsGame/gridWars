@@ -17,6 +17,7 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('board');
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
+  localStorage.removeItem('count');
 
   for (var i = 0; i < 5; i++) {
     localStorage.removeItem('sub' + i);
