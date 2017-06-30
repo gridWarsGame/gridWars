@@ -339,3 +339,10 @@ if (localStorage.getItem('playerName') === null){
 } else {
   player.name = localStorage.getItem('playerName');
 }
+
+
+var saveArray = [];
+if ( count === 0 || sub.alive === false) {
+  saveArray.push(player.score);
+  localStorage.setItem('savedScore', JSON.stringify(saveArray));
+}
