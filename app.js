@@ -117,8 +117,9 @@ Coord.prototype.checkSub = function () {
       }
       return true;
     }
-    feedback.textContent = 'Miss!';
+    this.status = 'miss';
     this.squareRef.textContent = 'O';
+    feedback.textContent = 'Miss!';
     count--;
     localStorage.setItem('count', count);
     turn.textContent = 'Misses left: ' + count;
@@ -287,7 +288,7 @@ Sub.prototype.addToBoard = function(index) {
   var x = this.location[0];
   var y = this.location[1];
   for (var i = 0; i < this.length; i++) {
-    console.log('Sub Coords: [' + (x+1) + ', ' + (y+1) + ']');
+    console.log('Sub section coords: [' + (x+1) + ', ' + (y+1) + ']');
     board.addSub(x, y, index);
     if (this.orientation === 'north-south') {
       y++;
