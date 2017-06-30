@@ -342,12 +342,19 @@ Player.prototype.attack = function(x, y) {
   board.save();
 
   if(result === true) {
+    var subsDestroyed = 0;
     for (var i = 0; i < subArray.length; i++){
       var sub = subArray[i];
-      if(sub.alive === false && sub.shown == false) {
-        alert('You destroyed a sub!');
-        sub.shown = true;
+      if(sub.alive === false) {
+        if (sub.shown == false) {
+          alert('You destroyed a sub!');
+          sub.shown = true;
+        }
+        subsDestroyed++;
       }
+    }
+    if (subsDestroyed === 5){
+      alert('You won the game!!!');
     }
   }
 
