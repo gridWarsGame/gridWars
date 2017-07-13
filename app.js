@@ -17,6 +17,12 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('board');
   localStorage.removeItem('sub');
   localStorage.removeItem('player');
+  localStorage.removeItem('count');
+
+  for (var i = 0; i < 5; i++) {
+    localStorage.removeItem('sub' + i);
+  }
+
 });
 
 // functions declarations
@@ -65,13 +71,14 @@ function fireMissles (event) {
     fire.removeEventListener('submit', fireMissles);
     return;
   }
-  var x = parseInt(event.target.x.value);
-  var y = parseInt(event.target.y.value);
-  player.attack(x, y);
-  count--;
-  turn.textContent = 'Turns left: ' + count;
+  try {
+    var x = parseInt(event.target.x.value);
+    var y = parseInt(event.target.y.value);
+    player.attack(x, y);
+  } catch (e) {
+    alert('Enter a coordinate...');
+  }
 }
-
 
 // Object Constructors
 
@@ -90,6 +97,7 @@ function Coord (object) {
     this.status = 'unseen';
     //this tells whether there is a sub at this location.
     this.sub = false;
+    this.subList = [];
   }
 }
 
@@ -98,10 +106,25 @@ Coord.prototype.checkSub = function () {
     if (this.sub){
       this.status = 'hit';
       this.squareRef.textContent = 'X';
+
+      feedback.textContent = 'Hit!';
+
+      var subList = this.subList;
+      console.log('Subs Hit: ' + subList);
+
+      for (var i = 0; i < subList.length; i++) {
+        player.updateScore();
+        subArray[subList[i]].hit();
+        subArray[subList[i]].save(subList[i]);
+      }
       return true;
     }
     this.status = 'miss';
     this.squareRef.textContent = 'O';
+    feedback.textContent = 'Miss!';
+    count--;
+    localStorage.setItem('count', count);
+    turn.textContent = 'Misses left: ' + count;
     return false;
   }
   else {
@@ -155,6 +178,33 @@ GameBoard.prototype.updateBoard = function () {
   }
 };
 
+GameBoard.prototype.showSubs = function () {
+  for (var i = 0; i < this.size; i++) {
+    for (var j = 0; j < this.size; j++) {
+
+      var subTrueFalse = this.grid[i][j].sub;
+      var squareRef = this.grid[i][j].squareRef;
+      if (subTrueFalse){
+        squareRef.textContent = 'X';
+      }
+    }
+  }
+};
+
+GameBoard.prototype.hideUnseenSubs = function () {
+  for (var i = 0; i < this.size; i++) {
+    for (var j = 0; j < this.size; j++) {
+
+      var subTrueFalse = this.grid[i][j].sub;
+      var squareRef = this.grid[i][j].squareRef;
+      var status = this.grid[i][j].status;
+      if (subTrueFalse && status === 'unseen'){
+        squareRef.textContent = ' ';
+      }
+    }
+  }
+};
+
 GameBoard.prototype.setupBoard = function (size) {
   this.createGrid(size);
 };
@@ -182,9 +232,10 @@ GameBoard.prototype.createGrid = function (size) {
   }
 };
 
-GameBoard.prototype.addSub = function (x, y) {
+GameBoard.prototype.addSub = function (x, y, index) {
   //subtract one so that grid coordinates start at 1.
   this.grid[x][y].sub = true;
+  this.grid[x][y].subList.push(index);
 };
 
 GameBoard.prototype.guessed = function (x,y) {
@@ -196,30 +247,26 @@ GameBoard.prototype.guessed = function (x,y) {
 // Sub constructor
 
 function Sub(length) {
-  if (localStorage.getItem('sub') === null) {
-    this.alive = true;
-    this.length = length;
-    this.lifePoints = this.length;
-    this.orientation = this.getOriention();
-    this.location = this.getLocation();
-    this.save();
-  } else {
-    this.restore();
-  }
-  this.addToBoard();
+  this.alive = true;
+  this.length = length;
+  this.lifePoints = this.length;
+  this.orientation = this.getOriention();
+  this.location = this.getLocation();
+  this.shown = false;
 }
 
-Sub.prototype.save = function() {
-  localStorage.setItem('sub', JSON.stringify(this));
+Sub.prototype.save = function(suffix) {
+  localStorage.setItem('sub' + suffix, JSON.stringify(this));
 };
 
-Sub.prototype.restore = function(){
-  var subProps = JSON.parse(localStorage.getItem('sub'));
+Sub.prototype.restore = function(suffix){
+  var subProps = JSON.parse(localStorage.getItem('sub' + suffix));
   for (var key in subProps) {
     if (subProps.hasOwnProperty(key)) {
       this[key] = subProps[key];
     }
   }
+  return this;
 };
 
 Sub.prototype.getOriention = function() {
@@ -236,16 +283,15 @@ Sub.prototype.hit = function() {
   if (this.lifePoints === 0) {
     this.alive = false;
   }
-  this.save();
 };
 
-Sub.prototype.addToBoard = function() {
+Sub.prototype.addToBoard = function(index) {
   // setting physical location of sub on board.
   var x = this.location[0];
   var y = this.location[1];
   for (var i = 0; i < this.length; i++) {
-    console.log('Sub Coords: [' + (x+1) + ', ' + (y+1) + ']');
-    board.addSub(x, y);
+    console.log('Sub section coords: [' + (x+1) + ', ' + (y+1) + ']');
+    board.addSub(x, y, index);
     if (this.orientation === 'north-south') {
       y++;
     } else {
@@ -298,19 +344,24 @@ Player.prototype.restore = function(){
 Player.prototype.attack = function(x, y) {
   var result = board.guessed(x, y);
   board.save();
+
   if(result === true) {
-    // Game Over!
-    sub.hit();
-    feedback.textContent = 'Hit!';
-    this.score++;
-  } else {
-    feedback.textContent = 'Miss!';
+    var subsDestroyed = 0;
+    for (var i = 0; i < subArray.length; i++){
+      var sub = subArray[i];
+      if(sub.alive === false) {
+        if (sub.shown == false) {
+          alert('You destroyed a sub!');
+          sub.shown = true;
+        }
+        subsDestroyed++;
+      }
+    }
+    if (subsDestroyed === 5){
+      alert('You won the game!!!');
+    }
   }
-  if(sub.alive === false) {
-    alert('You destroyed the sub!');
-    fire.removeEventListener('submit', fireMissles);
-    result = false;
-  }
+
   this.turns.push([x, y]);
   this.save();
   currentScore.textContent = this.score;
@@ -322,6 +373,9 @@ Player.prototype.getName = function () {
   localStorage.setItem('playerName', this.name);
 };
 
+Player.prototype.updateScore = function () {
+  this.score++;
+};
 
 // Program flow
 
@@ -329,10 +383,28 @@ var board = new GameBoard(10);
 makeGridTable(board);
 board.updateBoard();
 
-var sub = new Sub(3);
+var subArray = [];
 
-var count = 10;
-turn.textContent = 'Turns left: ' + count;
+for (var i = 0; i < 5; i++) {
+  var sub = new Sub(4);
+  if (localStorage.getItem('sub' + i) === null) {
+    sub.addToBoard(i);
+    sub.save(i);
+  }
+  else {
+    sub.restore(i);
+  }
+  subArray.push(sub);
+}
+
+var count;
+
+if (localStorage.getItem('count') === null)
+  count = 10;
+else {
+  count = localStorage.getItem('count');
+}
+turn.textContent = 'Misses left: ' + count;
 
 var player = new Player();
 
